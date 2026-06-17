@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--
+      🧠 PROJECT TITLE: SEO Profile Card
+
+      ✅ WHAT YOU ARE PRACTICING (HTML Essentials)
+      - HTML Structure (doctype, html, head, body)
+      - Meta Tags & SEO (charset, viewport, description, keywords, author)
+      - Headings + Paragraphs
+      - Divs + Spans (grouping + styling hooks)
+      - Lists (ul/ol)
+      - Tables (table, thead, tbody, tr, th, td)
+      - Forms + User Input (form, label, input, select, textarea, button)
+
+      🎯 PROJECT GOAL
+      Build a simple personal profile landing page that practices HTML structure, meta tags for SEO, headings/paragraphs, div/span grouping, lists, a small table, and a contact form.
+
+    -->
+
+    <!-- STEP 1 — Add your basic meta tags -->
+    <!--
+      Inside <head>, add:
+      1) <meta charset="UTF-8">
+      2) <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      3) <title>...</title> (use a title that matches this project)
+      4) <meta name="description" content="..."> (short: 1–2 sentences)
+      5) <meta name="keywords" content="..."> (comma-separated keywords)
+      6) <meta name="author" content="...">
+    -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Profile</title>
+    <meta name="description" content="Lamuel Wong's personal profile landing page">
+    <meta name="keywords" content="profile, landing, HTML, CSS">
+    <meta name="author" content="Lamuel Wong">
+
+    <!-- STEP 2 — Link your CSS file (optional but recommended) -->
+    <!--
+      Add: <link rel="stylesheet" href="styles.css">
+      Even if the focus is HTML, a tiny bit of CSS helps you *see* your structure.
+    -->
+
+    <link rel="stylesheet" href="styles.css">
+
+  </head>
+  <body>
+    <!-- STEP 3 — Create a semantic page layout -->
+    <!--
+      Create the main layout using semantic tags:
+      - <header> for the top section
+      - <main> for the main content
+      - <footer> for the bottom section
+      Tip: Wrap everything in a <div class="page"> if you want a single container.
+    -->
+
+    <!-- STEP 4 — Header content (Headings + span) -->
+    <!--
+      Inside <header>, add:
+      - One <h1> with your name or brand
+      - One <p> that describes you in 1–2 lines
+      - Inside that <p>, wrap ONE important word in a <span class="small">...</span> OR <span>...</span>
+        (Example idea: "Front-End" or "Mentor")
+    -->
+
+    <header>
+        <h1>Lamuel Wong</h1>
+        <p>Aspiring <span>web developer</span> based in Toronto, building practical projects while growing my skills in HTML, CSS, JavaScript, and modern web tools.</p>
+    </header>
+
+    <!-- STEP 5 — Main content with 2 sections (Divs + Lists) -->
+    <!--
+      Inside <main>, create a <div class="grid-2"> to hold two cards side-by-side (on desktop).
+      Card A: <section class="card"> with:
+      - <h2>About</h2>
+      - 2–3 <p> lines about the person/brand
+      Card B: <section class="card"> with:
+      - <h2>Skills</h2>
+      - A <ul> list of at least 5 skills
+      - A <p class="small"> note under the list
+    -->
+
+    <main>
+        <div class="grid-2">
+            <section class="card">
+                <h2>About</h2>
+                <p>I am a Computer Programming graduate based in Toronto, currently building my foundation in HTML, CSS, JavaScript, and full-stack web development.</p>
+                <p>My background combines technical learning, customer-facing retail tech experience, and hands-on practice with WordPress and web projects.</p>
+                <p>I enjoy creating practical, clean, and user-friendly webpages while continuing to improve my problem-solving and development skills.</p>
+            </section>
+            <section class="card">
+                <h2>Skills</h2>
+                <ul>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                    <li>Git and GitHub</li>
+                    <li>React</li>
+                    <li>Node.js</li>
+                </ul>
+                <p class="small">Currently focused on strengthening my web development fundamentals through small projects and consistent practice.</p>
+            </section>
+        </div>
+
+
+    <!-- STEP 6 — Add a small table (Tables) -->
+    <!--
+      Below the cards, add another <section class="card"> with:
+      - <h2>Weekly Focus</h2>
+      - A <table> with a <thead> and <tbody>
+      - Include 3 rows in <tbody> (example: Day / Topic / Goal)
+    -->
+
+        <section class="card">
+            <h2>Weekly Focus</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Topic</th>
+                        <th>Goal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Monday</td>
+                        <td>Gym</td>
+                        <td>Chest & Triceps</td>
+                    </tr>
+                    <tr>
+                        <td>Tuesday</td>
+                        <td>LetPhil Web Dev Course</td>
+                        <td>HTML Essentials</td>
+                    </tr>
+                    <tr>
+                        <td>Wednesday</td>
+                        <td>Gaming</td>
+                        <td>Beat Final Boss</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    <!-- STEP 7 — Add a contact form (Forms) -->
+    <!--
+      Add another <section class="card"> with:
+      - <h3>Contact</h3>
+      - A <form> that contains:
+        1) Name input (text)
+        2) Email input (email)
+        3) Reason dropdown (select with 3 options)
+        4) Message textarea
+        5) Submit button
+      Important: each input MUST have a matching <label> with for/id.
+    -->
+
+    <section class="card">
+        <h3>Contact</h3>
+        <form>
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+            <br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            <br>
+            <br>
+            <select name="reason" id="reason">
+                <option value="">Select a reason</option>
+                <option value="project">Project inquiry</option>
+                <option value="networking">Networking</option>
+                <option value="other">Other</option>
+            </select>
+            <br>
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4">Please rate 5 stars.</textarea>
+            <br>
+            <br>
+            <button type="submit">Send</button>
+        </form>
+    </section>
+    </main>
+
+    <!-- STEP 8 — Footer (Structure) -->
+    <!--
+      Inside <footer>, add:
+      - A <p> with copyright text
+      - An <ol> with 3 quick links you *would* add (just placeholders)
+    -->
+
+    <footer>
+        <p>Created by Lamuel Wong - 2026</p>
+        <ol>
+            <li>https://www.linkedin.com/in/lamuelwong3001/</li>
+            <li>https://github.com/lamuel-wong</li>
+            <li>https://steamcommunity.com/profiles/76561198263418003/</li>
+        </ol>
+    </footer>
+
+    <!-- STEP LAST — Validate your HTML -->
+    <!--
+      Quick self-check:
+      ✅ Do you have ONLY ONE <h1>?
+      ✅ Are your headings in order? (h1 → h2 → h3)
+      ✅ Does every <label> connect to an input using for="..." and id="..."?
+      ✅ Does your table have <thead> and <tbody>?
+      ✅ Did you use BOTH a list and a table somewhere?
+      ✅ Did you use a <span> to style a *small* piece of text inside a bigger element?
+    -->
+  </body>
+</html>
