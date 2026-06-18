@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!--
+
+<head>
+  <!--
       🧠 PROJECT TITLE: Community Event Signup
 
       ✅ WHAT YOU ARE PRACTICING (HTML Essentials)
@@ -18,8 +19,8 @@
 
     -->
 
-    <!-- STEP 1 — Add your basic meta tags -->
-    <!--
+  <!-- STEP 1 — Add your basic meta tags -->
+  <!--
       Inside <head>, add:
       1) <meta charset="UTF-8">
       2) <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,15 +30,25 @@
       6) <meta name="author" content="...">
     -->
 
-    <!-- STEP 2 — Link your CSS file (optional but recommended) -->
-    <!--
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Event Signup</title>
+  <meta name="description" content="Lamuel Wong's event info + signup page">
+  <meta name="keywords" content="event, signup, HTML, CSS">
+  <meta name="author" content="Lamuel Wong">
+
+  <!-- STEP 2 — Link your CSS file (optional but recommended) -->
+  <!--
       Add: <link rel="stylesheet" href="styles.css">
       Even if the focus is HTML, a tiny bit of CSS helps you *see* your structure.
     -->
-  </head>
-  <body>
-    <!-- STEP 3 — Create a semantic page layout -->
-    <!--
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <!-- STEP 3 — Create a semantic page layout -->
+  <!--
       Create the main layout using semantic tags:
       - <header> for the top section
       - <main> for the main content
@@ -45,6 +56,7 @@
       Tip: Wrap everything in a <div class="page"> if you want a single container.
     -->
 
+  <div class="page">
     <!-- STEP 4 — Header (Event title + details) -->
     <!--
       In <header>, add:
@@ -52,6 +64,16 @@
       - A <p> with date + location
       - Use a <span> inside the paragraph to highlight the city or date
     -->
+
+    <header>
+      <h1>
+        Toronto Tech Meetup
+      </h1>
+      <p>
+        Join us on <span>August 15, 2026</span> at <span>Toronto Community Hall</span> for a beginner-friendly afternoon
+        of tech talks, networking, and community learning.
+      </p>
+    </header>
 
     <!-- STEP 5 — Main section A (Event highlights list) -->
     <!--
@@ -61,16 +83,67 @@
       - A <p class="small"> note explaining why lists are useful
     -->
 
-    <!-- STEP 6 — Main section B (Schedule table) -->
-    <!--
+    <main>
+      <section class="card">
+        <h2>Event Highlights</h2>
+        <ul>
+          <li>Beginner-friendly tech and coding discussions</li>
+          <li>Networking with students, learners, and local professionals</li>
+          <li>Short talks about web development and career paths</li>
+          <li>Hands-on HTML and CSS practice activities</li>
+          <li>Time for questions, feedback, and meeting new people</li>
+        </ul>
+
+        <p class="small">Lists are useful because they help organise information to be easy to scan and understand
+          quickly.</p>
+      </section>
+
+
+      <!-- STEP 6 — Main section B (Schedule table) -->
+      <!--
       Add another <section class="card"> with:
       - <h2>Schedule</h2>
       - A <table> with columns: Time / Activity / Notes
       - Include 4 rows in the schedule
     -->
 
-    <!-- STEP 7 — Main section C (Signup form) -->
-    <!--
+      <section class="card">
+        <h2>Schedule</h2>
+        <table>
+          <thead>
+            <tr>
+              <td>Time</td>
+              <td>Activity</td>
+              <td>Notes</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1:00 PM</td>
+              <td>Check-in and Welcome</td>
+              <td>Guests arrive, sign in, and receive event materials</td>
+            </tr>
+            <tr>
+              <td>1:30 PM</td>
+              <td>Intro to Web Development</td>
+              <td>A short beginner-friendly talk about HTML, CSS, and JavaScript</td>
+            </tr>
+            <tr>
+              <td>2:30 PM</td>
+              <td>Group Activity</td>
+              <td>Attendees practice planning a simple webpage together</td>
+            </tr>
+            <tr>
+              <td>3:30 PM</td>
+              <td>Networking and Q&amp;A</td>
+              <td>Meet other learners, ask questions, and share contact details</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- STEP 7 — Main section C (Signup form) -->
+      <!--
       Add another <section class="card"> with:
       - <h3>Signup</h3>
       - A <form> that includes:
@@ -83,6 +156,45 @@
         7) Submit button
     -->
 
+      <section class="card">
+        <form>
+          <h3>Signup</h3>
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" required>
+          <br>
+          <label for="email">Email:</label>
+          <input type="email" id="email" required>
+          <br>
+          <br>
+          <label for="ticket">Ticket Type:</label>
+          <select name="ticket" id="ticket">
+            <option value="">Please select ticket type</option>
+            <option value="general">General admission</option>
+            <option value="student">Student ticket</option>
+            <option value="volunteer">Volunteer pass</option>
+          </select>
+          <br>
+          <br>
+          <label for="dietary-pref">Dietary Preference</label><br>
+          <input type="radio" id="diet-none" name="dietary-pref" value="none">
+          <label for="diet-none">No preference</label><br>
+          <input type="radio" id="diet-vegetarian" name="dietary-pref" value="vegetarian">
+          <label for="diet-none">Vegetarian</label><br>
+          <input type="radio" id="diet-vegan" name="dietary-pref" value="vegan">
+          <label for="diet-none">Vegan</label><br>
+          <br>
+          <input type="checkbox" id="agree-terms" name="agree-terms">
+          <label for="agree-terms">I agree to the event terms and guidelines.</label>
+          <br>
+          <label for="message">Message</label>
+          <textarea name="message" id="message" rows="4"></textarea>
+          <br>
+          <br>
+          <button type="submit">Submit</button>
+        </form>
+      </section>
+    </main>
+
     <!-- STEP 8 — Footer (Mini SEO checklist) -->
     <!--
       In <footer>, add an <ol> checklist with 3 SEO reminders:
@@ -90,6 +202,14 @@
       - Meta description exists
       - Headings are in order
     -->
+
+    <footer>
+      <ol>
+        <li>Title is clear</li>
+        <li>Meta description exists</li>
+        <li>Headings are in order</li>
+      </ol>
+    </footer>
 
     <!-- STEP LAST — Validate your HTML -->
     <!--
@@ -101,5 +221,7 @@
       ✅ Did you use BOTH a list and a table somewhere?
       ✅ Did you use a <span> to style a *small* piece of text inside a bigger element?
     -->
-  </body>
+  </div>
+</body>
+
 </html>
