@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!--
+
+<head>
+  <!--
       🧠 PROJECT TITLE: Recipe Planner: Table + Lists
 
       ✅ WHAT YOU ARE PRACTICING (HTML Essentials)
@@ -19,8 +20,8 @@
    
     -->
 
-    <!-- STEP 1 — Add your basic meta tags -->
-    <!--
+  <!-- STEP 1 — Add your basic meta tags -->
+  <!--
       Inside <head>, add:
       1) <meta charset="UTF-8">
       2) <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,15 +31,25 @@
       6) <meta name="author" content="...">
     -->
 
-    <!-- STEP 2 — Link your CSS file (optional but recommended) -->
-    <!--
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Planner</title>
+  <meta name="description" content="Lamuel Wong's recipe planner">
+  <meta name="keywords" content="recipe, planner, HTML, CSS">
+  <meta name="author" content="Lamuel Wong">
+
+  <!-- STEP 2 — Link your CSS file (optional but recommended) -->
+  <!--
       Add: <link rel="stylesheet" href="styles.css">
       Even if the focus is HTML, a tiny bit of CSS helps you *see* your structure.
     -->
-  </head>
-  <body>
-    <!-- STEP 3 — Create a semantic page layout -->
-    <!--
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+  <!-- STEP 3 — Create a semantic page layout -->
+  <!--
       Create the main layout using semantic tags:
       - <header> for the top section
       - <main> for the main content
@@ -46,21 +57,46 @@
       Tip: Wrap everything in a <div class="page"> if you want a single container.
     -->
 
-    <!-- STEP 4 — Header (title + intro paragraph) -->
-    <!--
+  <!-- STEP 4 — Header (title + intro paragraph) -->
+  <!--
       Inside <header>, add:
       - One <h1> with the page name (ex: "Recipe Planner")
       - One <p> explaining what the page is for
       - Add a <span> inside the paragraph to emphasize ONE word (ex: "simple")
     -->
 
-    <!-- STEP 5 — Main section A (Lists) -->
-    <!--
+  <header>
+    <h1>Recipe Planner</h1>
+    <p>A <span>simple</span> recipe/meal-planning page with a detailed ingredients table and small form for adding a
+      shopping note.</p>
+  </header>
+
+  <!-- STEP 5 — Main section A (Lists) -->
+  <!--
       Inside <main>, create a <section class="card"> for "Today’s Plan"
       - Add an <h2>
       - Add a <ul> list for "Meals" (at least 3 items)
       - Add an <ol> list for "Cooking Steps" (at least 4 steps)
     -->
+
+  <main>
+    <section class="card">
+      <h2>Today's Plan</h2>
+      <h3>Meals</h3>
+      <ul>
+        <li>Chicken Teriyaki</li>
+        <li>Creamy Tomato Pasta with Ground Beef</li>
+        <li>Laing</li>
+      </ul>
+      <h3>Cooking Steps</h3>
+      <ol>
+        <li>Season the chicken with salt and pepper.</li>
+        <li>Pan-fry the chicken until golden brown.</li>
+        <li>Heat Teriyaki sauce in a saucepan then coat the chicken in the sauce</li>
+        <li>Plate the meal and store leftovers for later.</li>
+      </ol>
+    </section>
+
 
     <!-- STEP 6 — Main section B (Tables) -->
     <!--
@@ -69,6 +105,47 @@
       - Use <thead> and <tbody>
       - Add at least 5 rows in the tbody
     -->
+
+    <section class="card">
+      <h2>Ingredients Table</h2>
+      <table>
+        <thead>
+          <tr>
+            <td>Ingredient</td>
+            <td>Amount</td>
+            <td>Notes</td>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr>
+            <td>Chicken thighs</td>
+            <td>6 pieces</td>
+            <td>Score chicken to cook evenly</td>
+          </tr>
+          <tr>
+            <td>Rice</td>
+            <td>1 cup</td>
+            <td>Steam in a rice cooker</td>
+          </tr>
+          <tr>
+            <td>Teriyaki Sauce</td>
+            <td>4 tablespoons</td>
+            <td>Use for marinade</td>
+          </tr>
+          <tr>
+            <td>Ground Beef</td>
+            <td>2 lbs</td>
+            <td>Season with salt, pepper, garlic powder, onion powder, and paprika</td>
+          </tr>
+          <tr>
+            <td>Spinach</td>
+            <td>1 bunch</td>
+            <td>Wash thoroughly before adding to the pan</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
     <!-- STEP 7 — Main section C (Form) -->
     <!--
@@ -82,13 +159,46 @@
         5) A submit button
     -->
 
-    <!-- STEP 8 — Footer (tiny SEO reminder) -->
-    <!--
+    <section class="card">
+      <h2>Shopping Note</h2>
+      <form>
+        <label for="item">Item:</label>
+        <input type="text" id="item" required>
+        <br>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity">
+        <br>
+        <br>
+        <select name="category" id="category">
+          <option value="">Select a category</option>
+          <option value="Produce">Produce</option>
+          <option value="Dairy">Dairy</option>
+          <option value="Protein">Protein</option>
+          <option value="Other">Other</option>
+        </select>
+        <br>
+        <label for="notes">Extra notes</label>
+        <textarea name="notes" id="notes" rows="4">...</textarea>
+        <br>
+        <br>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- STEP 8 — Footer (tiny SEO reminder) -->
+  <!--
       In <footer>, add a <p class="small"> reminding what meta description is used for.
     -->
 
-    <!-- STEP LAST — Validate your HTML -->
-    <!--
+    <footer>
+      <p class="small">
+        Meta description is used to summarise for search engines and users what a page is about.
+      </p>
+    </footer>
+
+  <!-- STEP LAST — Validate your HTML -->
+  <!--
       Quick self-check:
       ✅ Do you have ONLY ONE <h1>?
       ✅ Are your headings in order? (h1 → h2 → h3)
@@ -97,5 +207,7 @@
       ✅ Did you use BOTH a list and a table somewhere?
       ✅ Did you use a <span> to style a *small* piece of text inside a bigger element?
     -->
-  </body>
+
+</body>
+
 </html>
