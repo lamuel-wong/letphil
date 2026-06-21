@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- header section -->
+    <header>
+        <h1>My Personal Blog</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <!-- main content -->
+        <main>
+            <section id="about">
+                <h2>About Me</h2>
+                <p>Welcome to my personal blog, where I share my thoughts on web development technology and more!</p>
+            </section>
+
+            <!-- blog articles -->
+            <article>
+                <h2>Understanding Semantic HTML</h2>
+                <p>Semantic HTML is a way to write HTML that describes the meaning of the content</p>
+                <img src="./images/kurzgesagt-frontier.jpg"
+                    alt="an image of space explorers on an alien planet looking at spaceships in the distance lifting off"
+                    width="500">
+            </article>
+
+            <article>
+                <h2>How to add media in HTML</h2>
+                <p>Adding images, videos and audio files to a webpage enhances the viewer's experience.</p>
+                <audio controls>
+                    <source src="./audio-sample.MP3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </article>
+
+            <!-- embedding youtube video -->
+            <section>
+                <h2>Watch this Phil's Video</h2>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/TSd5pN5k_MQ?si=O--4YcYo4fomHmWA"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </section>
+        </main>
+
+        <!-- sidebar -->
+        <aside>
+            <h3>More Links</h3>
+            <ul>
+                <li><a href="#">My Portfolio</a></li>
+                <li><a href="#">Follow me on other platforms</a></li>
+                <li><a href="#">Subscribe to YouTube</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <!-- footer -->
+    <footer>
+        <p>Contact me at: <a href="mailto:lamuel.wong3001@gmail.com">lamuel.wong3001@gmail.com</a></p>
+        <p>Call me at: <a href="tel:123456789">+123456789</a></p>
+        <p>&copy 2026 My Blog</p>
+    </footer>
+</body>
+
+</html>
+
+<!-- 
+[x] a header with nav bar
+[x] a main content area with blog articles
+[x] a sidebar using <aside>
+[x] a footer with contact details
+[x] anchor links for navigation
+[x] images, audio and video
+[x] a youtube embed video
+-->
