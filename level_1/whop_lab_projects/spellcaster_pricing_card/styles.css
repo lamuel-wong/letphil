@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+
+:root {
+    --background: #080510;
+    --background-light: #1a0913;
+    --text-color: #ffffff;
+    --text-muted: #94a3b8;
+    --muted-bold: #b4bdc9;
+    --color-gold: #ffcb69;
+}
+
+body {
+    font-family: "Crimson Text", serif;
+    height: 100vh;
+    color: var(--text-color);
+    background-color: var(--background);
+    background-image: linear-gradient(to bottom right,
+            var(--background), var(--background-light));
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-header {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.cards-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+    flex-wrap: warp;
+}
+
+.card {
+    text-align: center;
+    height: 580px;
+    padding: 20px;
+    border-radius: 10px;
+    overflow: visible;
+
+    display: flex;
+    flex-direction: column;
+
+    /* box-shadow: x-offset y-offset blur-radius spread-radius color(R, G, B, opacity)  */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.8);
+
+
+    /* for hover effect to transition/animate smoothly instead of snapping */
+    transition:
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+.card-divider {
+    height: 1px;
+    border: none;
+    background-image: linear-gradient(to right,
+            var(--card-bg-color),
+            var(--card-accent-color),
+            var(--card-bg-color));
+    margin-top: 16px;
+}
+
+.card-top {
+    min-height: 200px;
+}
+
+.card-heading {
+    color: var(--card-accent-color);
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.card-icon {
+    font-size: 32px;
+}
+
+/* .card-image {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto;
+} */
+
+.card-apprentice {
+    --card-bg-color: #0e1e3d;
+    --card-accent-color: #4b6ea1;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--card-accent-color);
+}
+
+.card-sorcerer {
+    --card-bg-color: #1a0d2e;
+    --card-accent-color: #a855f7;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--card-accent-color);
+}
+
+.card-archmage {
+    --card-bg-color: #1c0a0a;
+    --card-accent-color: #ef4444;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--card-accent-color);
+}
+
+.card-featured {
+    margin-top: -20px;
+    position: relative;
+    height: 600px;
+}
+
+.card-featured .card-inner {
+    padding-top: 20px;
+}
+
+.card-badge {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: black;
+    background-color: var(--color-gold);
+    border-radius: 10px;
+    padding: 5px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
+
+.card-inner {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.btn-card {
+    color: var(--card-accent-color);
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--card-accent-color);
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 8px;
+
+    margin-top: auto;
+    margin-bottom: 8px;
+    padding: 10px;
+    width: 100%;
+    min-height: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+
+    /* box-shadow: x-offset y-offset blur-radius spread-radius color(R, G, B, opacity) */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+
+    /* for hover effect to transition/animate smoothly instead of snapping */
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.15s ease;
+}
+
+.card-archmage .btn-card {
+    color: var(--color-gold);
+    border: 1px solid var(--color-gold);
+}
+
+.btn-card:hover {
+    background-color: var(--card-accent-color);
+    color: var(--text-color);
+    cursor: pointer;
+
+    box-shadow:
+        0px 4px 6px rgba(0, 0, 0, 0.4),
+        0 0 8px color-mix(in srgb, var(--card-accent-color) 75%, white);
+}
+
+.card:has(.btn-card:hover) {
+    box-shadow:
+    /* mix 60% accent color with 40% white */
+        0 0 0 1px color-mix(in srgb,
+            var(--card-accent-color) 60%,
+            white),
+        0 0 16px color-mix(in srgb,
+            var(--card-accent-color) 70%,
+            white),
+        0 10px 22px rgba(0, 0, 0, 0.45);
+
+    /* shift card upward a bit for hover effect */
+    transform: translateY(-3px);
+}
+
+.card:hover {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb,
+            var(--card-accent-color) 75%,
+            white),
+        0 0 12px color-mix(in srgb,
+            var(--card-accent-color) 85%,
+            white),
+        0 8px 18px rgba(0, 0, 0, 0.4);
+
+    transform: translateY(-1px);
+}
+
+.page-eyebrow,
+.page-title,
+.card-heading,
+.card-badge,
+.card-price,
+.btn-card {
+    font-family: Cinzel, serif;
+}
+
+span.highlight {
+    color: var(--color-gold);
+}
+
+
+li.feature-item.feature-no {
+    color: var(--text-muted);
+}
+
+em,
+strong em {
+    color: var(--muted-bold);
+}
+
+.card-price {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+.feature-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+ul.feature-list {
+    list-style: none;
+    padding-left: 0;
+    text-align: left;
+}
+
+li.feature-item.feature-yes::before {
+    content: "✦ ";
+    margin-right: 8px;
+    color: var(--color-gold);
+}
+
+li.feature-item.feature-no::before {
+    content: "× ";
+    margin-right: 8px;
+    color: var(--text-muted);
+}
