@@ -23,6 +23,19 @@
 //
 // Log all four to the console.
 
+console.log("TASK 1:");
+
+const fullName = "Lamuel Wong"; // const since my name would not change
+let age = 25; // let since my age can be updated as I get older
+let city = "Toronto"; // let since my address can change when I move later
+let isStudent = true; // let since my status as a student can change 
+
+// console.log(fullName + "\n" + age + "\n" + city + "\n" + isStudent);
+console.log(fullName);
+console.log(age);
+console.log(city);
+console.log(isStudent);
+
 // ----------------------------------------------------------
 // TASK 2 — Update what can change
 // ----------------------------------------------------------
@@ -33,6 +46,15 @@
 // Then try to reassign fullName.
 // Read the error, then comment that line out.
 
+console.log("TASK 2:");
+
+city = "Waterloo";
+isStudent = false;
+console.log(city);
+console.log(isStudent);
+
+// fullName = "John Smith";
+
 // ----------------------------------------------------------
 // TASK 3 — Undefined in the wild
 // ----------------------------------------------------------
@@ -41,6 +63,13 @@
 //
 // Now assign it a movie title.
 // Log it again.
+
+console.log("TASK 3:");
+
+let favoriteMovie;
+console.log(favoriteMovie);
+favoriteMovie = "Interstellar";
+console.log(favoriteMovie);
 
 // ----------------------------------------------------------
 // TASK 4 — Build a product listing
@@ -56,6 +85,16 @@
 // Log each variable on its own line.
 // Then log: productName + " by " + productBrand + " — $" + productPrice
 
+console.log("TASK 4:");
+
+const productName = "Plain White T-shirt";
+const productBrand = "UniqNo";
+let productPrice = 20;
+let inStock = true;
+
+// console.log(productName + " by " + productBrand + " — $" + productPrice);
+console.log(`${productName} by ${productBrand} — $${productPrice}`);
+
 // ----------------------------------------------------------
 // TASK 5 — Stock status update
 // ----------------------------------------------------------
@@ -67,6 +106,14 @@
 // Why did this fail but inStock worked?
 // Write your answer as a comment.
 
+console.log("TASK 5:");
+
+inStock = false;
+console.log("In stock: " + inStock);
+
+// productName = "Plain Black T-shirt";
+// invalid assignment because productName is a const variable while inStock is let
+
 // ----------------------------------------------------------
 // TASK 6 — Fix the bad names
 // ----------------------------------------------------------
@@ -77,6 +124,18 @@
 //   my score      → fix it
 //   X             → rename to something descriptive, then declare it
 //   GaMeLeVeL     → fix the casing
+
+console.log("TASK 6:");
+
+const secondPlayer = "Biggs";
+let myScore = 0;
+let livesRemaining = 3;
+let gameLevel = 1;
+
+console.log(secondPlayer);
+console.log(myScore);
+console.log(livesRemaining);
+console.log(gameLevel);
 
 // ----------------------------------------------------------
 // TASK 7 — Two-step declaration
@@ -92,6 +151,16 @@
 //
 // You should see three console lines: undefined → 500 → 750
 
+console.log("TASK 7:");
+
+let highScore;
+console.log(highScore);
+highScore = 500;
+console.log(highScore);
+highScore = 750;
+console.log(highScore);
+
+
 // ----------------------------------------------------------
 // TASK 8 — Connect the variables
 // ----------------------------------------------------------
@@ -102,6 +171,14 @@
 //
 // Log: appName + " v" + version + " — built by " + authorName
 // Expected format: "TaskMaster v3 — built by [your name]"
+
+console.log("TASK 8:");
+
+const appName = "TaskMaster";
+const version = 3;
+const authorName = "Lamuel"
+
+console.log(`${appName} v${version} — built by ${authorName}`);
 
 // ----------------------------------------------------------
 // ⭐ STRETCH GOAL
@@ -115,3 +192,14 @@
 // Then reassign currentYear... wait, can you? Why not?
 // Write the answer as a comment.
 // What keyword would you need if currentYear could change?
+
+console.log("STRETCH GOAL:");
+
+const startYear = 2020;
+const currentYear = 2025;
+let yearsRunning = currentYear - startYear;
+console.log(`${appName} has been running for ${yearsRunning} years.`);
+
+currentYear = 2026;
+// currentYear cannot be reassigned because it is a const variable
+// let would have to be used instead of const
