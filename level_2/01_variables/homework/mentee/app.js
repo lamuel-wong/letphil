@@ -30,7 +30,6 @@ let age = 25; // let since my age can be updated as I get older
 let city = "Toronto"; // let since my address can change when I move later
 let isStudent = true; // let since my status as a student can change 
 
-// console.log(fullName + "\n" + age + "\n" + city + "\n" + isStudent);
 console.log(fullName);
 console.log(age);
 console.log(city);
