@@ -17,9 +17,9 @@ storeName = "MegaShop";
 console.log(storeName);
 
 // What's wrong ↓
-
+// storeName cannot be reassigned because it is a const variable
 // Your fix ↓
-
+let storeName = "TechMart";
 
 // ----------------------------------------------------------
 // 🟡 DEBUG 2 — Medium
@@ -32,9 +32,9 @@ let orderTotal = item1Price + Item2Price;
 console.log("Total: $" + orderTotal);
 
 // What's wrong ↓
-
+// In line 31, Item2Price is not the same as item2Price from line 30 because variables are case-sensitive
 // Your fix ↓
-
+let orderTotal = item1Price + item2Price;
 
 // ----------------------------------------------------------
 // 🔴 DEBUG 3 — Hard
@@ -51,5 +51,8 @@ console.log(productName + " — $" + productPrice);
 // Why is the current keyword considered bad practice?
 
 // What's wrong ↓
-
+// var is being used to declare variables instead of let. 
+// It is considered bad practice because it introduces unpredictable scope behaviour while let and const are modern ways of declaring variables that are safer.
 // Your fix ↓
+const productName = "Headphones";
+let productPrice = 49.99;
