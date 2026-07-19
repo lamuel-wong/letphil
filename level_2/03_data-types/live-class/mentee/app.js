@@ -311,6 +311,24 @@ console.log(false + "!", typeof (false + "!"));
 
 console.log("\n--- Task 7: Explicit Conversion ---");
 // your code here
+const ageNumber = Number(age);
+console.log(`ageNumber: ${ageNumber}`);
+console.log(`type: ${typeof ageNumber}`);
+
+const birthYear = 2025 - ageNumber;
+console.log(`Born approximately: ${birthYear}`);
+
+const bad = Number("twenty-eight");
+console.log(`bad: ${bad}`);
+console.log(`isNaN(bad): ${isNaN(bad)}`);
+
+const messy = "42px";
+const px = parseInt(messy);
+console.log(`px: ${px}`);
+
+const premiumText = String(isPremium);
+console.log(`premiumText: ${premiumText}`);
+console.log(`type: ${typeof premiumText}`);
 
 // ============================================================
 // PART 5 — NULL, UNDEFINED, AND FALSY VALUES
@@ -346,6 +364,17 @@ console.log("\n--- Task 7: Explicit Conversion ---");
 
 console.log("\n--- Task 8: null and undefined ---");
 // your code here
+console.log(`score: ${score}`);
+console.log(`lastLogin: ${lastLogin}`);
+
+console.log(`typeof score: ${typeof score}`);
+console.log(`typeof lastLogin: ${typeof lastLogin}`);
+// typeof null returns an object and it is odd as null isn't an object but returns as such due to an old JS bug.
+
+console.log(`Boolean(null): ${Boolean(null)}`);
+console.log(`Boolean(undefined): ${Boolean(undefined)}`);
+
+// A variable would hold null when intentionally defined as null, while it would hold undefined when declared but without a definition.
 
 // TASK 9 — The six falsy values
 // Log Boolean() for each of the six falsy values to confirm they're all false.
@@ -366,6 +395,16 @@ console.log("\n--- Task 8: null and undefined ---");
 
 console.log("\n--- Task 9: Falsy Values ---");
 // your code here
+console.log(Boolean(false));
+console.log(Boolean(0));
+console.log(Boolean(""));
+console.log(Boolean(null));
+console.log(Boolean(undefined));
+console.log(Boolean(NaN));
+
+console.log(Boolean("0"));
+console.log(Boolean("false"));
+// "0" is truthy because it is treated as a non-empty string, while 0 is one of JS falsy values.
 
 // ============================================================
 // PART 6 — == vs ===
@@ -397,6 +436,23 @@ console.log("\n--- Task 9: Falsy Values ---");
 
 console.log("\n--- Task 10: == vs === ---");
 // your code here
+console.log(`1 === "1": ${1 === "1"}
+  1 == "1": ${1 == "1"}`);
+// 1 === "1" is false as they are different types while 1 == "1" is true since with ==, "1" gets converted to 1
+
+console.log(`0 === false: ${0 === false}
+  0 == false: ${0 == false}`);
+// 0 === false is false as they are different types while 0 == false is true since after coercion, they are both 0
+
+console.log(`"" === false: ${"" === false}
+  "" == false: ${"" == false}`);
+// "" === false is false as they are different types while "" == false is true since they are both treated as "nothing"
+
+console.log(`null === undefined: ${null === undefined}
+  null == undefined: ${null == undefined}`);
+// null === undefined is false as they are different types while null == undefined is true since after coercion, they are both 0
+
+// The one situation you would intentionally use == instead of === is to check whether a value is either null or undefined
 
 // ============================================================
 // CONNECT THE DOTS — Lessons 1, 2, and 3
@@ -430,3 +486,12 @@ console.log("\n--- Task 10: == vs === ---");
 
 console.log("\n--- Task 11: Profile Summary ---");
 // your code here
+const summary = 
+`Email: ${email.trim().toLowerCase()}
+Age: ${Number(age)}
+Premium: ${isPremium}
+Bio: ${bio.trim()}
+Score: ${score}`;
+
+console.log(summary);
+// Number(age) appears as 28 and not "28" because Number() already converted it from a string to a number, then the template literal converts the value into text without quotations since quotation marks are just how you write string in code rather than being a part of the string's value
