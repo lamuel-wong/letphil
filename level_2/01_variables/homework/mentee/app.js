@@ -91,6 +91,11 @@ const productBrand = "UniqNo";
 let productPrice = 20;
 let inStock = true;
 
+console.log(productName);
+console.log(productBrand);
+console.log(productPrice);
+console.log(inStock);
+
 // console.log(productName + " by " + productBrand + " — $" + productPrice);
 console.log(`${productName} by ${productBrand} — $${productPrice}`);
 
@@ -199,6 +204,6 @@ const currentYear = 2025;
 let yearsRunning = currentYear - startYear;
 console.log(`${appName} has been running for ${yearsRunning} years.`);
 
-currentYear = 2026;
+// currentYear = 2026;
 // currentYear cannot be reassigned because it is a const variable
 // let would have to be used instead of const
