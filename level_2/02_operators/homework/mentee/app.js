@@ -61,6 +61,7 @@ console.log(`Score: ${playerScore}`);
 // Write a comment: what does true/false mean in this context?
 
 livesRemaining -= 1;
+livesRemaining -= 1;
 console.log(livesRemaining > 0);
 // True or false means whether the lives remaining is greater than 0, true if it is, false if it is not greater
 
@@ -85,13 +86,13 @@ console.log(`Score after bonus: ${playerScore}`);
 // Log the result of each comparison. Write your prediction
 // as a comment BEFORE running the code.
 //
-//   playerScore > highScore       → prediction:
-//   playerScore === highScore     → prediction:
-//   playerScore >= highScore      → prediction:
+//   playerScore > highScore       → prediction: false 
+//   playerScore === highScore     → prediction: false
+//   playerScore >= highScore      → prediction: false
 
-console.log(playerScore > highScore); // false
-console.log(playerScore === highScore); // false
-console.log(playerScore >= highScore); // false
+console.log(playerScore > highScore); 
+console.log(playerScore === highScore); 
+console.log(playerScore >= highScore); 
 
 // ----------------------------------------------------------
 // TASK 6 — Update the high score
