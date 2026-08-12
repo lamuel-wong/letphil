@@ -94,8 +94,7 @@ if (percentage >= 90) {
   console.log("Grade: F ❌");
 }
 
-// 90 must come before 80 so it would execute the console.log first if the percentage is >= 90
-// instead of the other way around where it could end up assigning and logging multiple grades that fit the condition
+// 90 must come before 80 as the else if chain would stop as soon as it finds the first true condition. If reversed, an incorrect grade would be assigned.
 
 // ----------------------------------------------------------
 // TASK 5 — Pass or fail (if/else + operators)
@@ -187,7 +186,7 @@ if (earnedScore >= passingScore) {
   console.log(studentName + " passed with " + earnedScore + " points.");
 } else {
   console.log(
-    " needs " + Math.abs(pointsNeededToPass) + " more points to pass.",
+    studentName + " needs " + Math.abs(pointsNeededToPass) + " more points to pass.",
   );
 }
 
