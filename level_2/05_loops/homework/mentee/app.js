@@ -274,7 +274,6 @@ for (let i = 1; i <= 6; i++) {
 
     if (currentPrice > itemLimit) {
         console.log("⛔ Item " + i + " ($" + currentPrice + ") exceeds limit of $" + itemLimit);
-        itemsSkipped++;
         continue;
     }
 
