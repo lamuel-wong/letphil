@@ -32,6 +32,14 @@
 // Log: "📚 " + className
 // Log: "Students enrolled: " + studentNames.length
 
+const className = "JavaScript Fundamentals"; // const since the class name is predefined and won't change during execution.
+const passingScore = 60; // const since passing score is fixed and won't change.
+const studentNames = ["Aaron", "Bob", "Charles", "David", "Ethan", "Fred"]; // const since the array won't be reassigned.
+const studentScores = [74, 58, 92, 65, 81, 47]; // const since the array also won't be reassigned.
+
+console.log("📚 " + className);
+console.log("Students enrolled: " + studentNames.length);
+
 // ----------------------------------------------------------
 // TASK 2 — Access and display by index
 // ----------------------------------------------------------
@@ -42,6 +50,10 @@
 //
 // Then log the score of the THIRD student (index 2).
 
+console.log(`First student: ${studentNames[0]} — ${studentScores[0]}
+Last student: ${studentNames[studentNames.length - 1]} — ${studentScores[studentScores.length - 1]}
+Third student: ${studentNames[2]} — ${studentScores[2]}`);
+
 // ----------------------------------------------------------
 // TASK 3 — Update a score
 // ----------------------------------------------------------
@@ -50,6 +62,10 @@
 //
 // Log: "Updated score for " + studentNames[3] + ": " + studentScores[3]
 // Log the full studentScores array to confirm the change.
+
+studentScores[3] = 72;
+console.log(`Updated score for ${studentNames[3]}: ${studentScores[3]}`);
+console.log(studentScores);
 
 // ----------------------------------------------------------
 // TASK 4 — Loop and display the full class
@@ -62,6 +78,10 @@
 //   1. [name] → [score]
 //   2. [name] → [score]
 //   ...
+
+for (let i = 0; i < studentNames.length; i++) {
+  console.log(`${i + 1}. ${studentNames[i]} → ${studentScores[i]}`);
+}
 
 // ----------------------------------------------------------
 // TASK 5 — Calculate class stats
@@ -89,6 +109,35 @@
 //   Log: "Lowest score:  " + lowScore
 //   Log: "Passed: " + passCount + " | Failed: " + failCount
 
+let totalScore = 0;
+let highScore = 0;
+let lowScore = studentScores[0];
+let passCount = 0;
+let failCount = 0;
+
+for (let i = 0; i < studentScores.length; i++) {
+    totalScore += studentScores[i];
+    if (studentScores[i] > highScore) {
+        highScore = studentScores[i];
+    }
+    if (studentScores[i] < lowScore) {
+        lowScore = studentScores[i];
+    }
+    if (studentScores[i] >= passingScore) {
+        passCount++;
+    } else {
+        failCount++;
+    }
+}
+
+const classAverage = totalScore / studentScores.length;
+
+console.log(`📊 Class Stats:
+Average score: ${classAverage}
+Highest score: ${highScore}
+Lowest score: ${lowScore}
+Passed: ${passCount} | Failed: ${failCount}`);
+
 // ----------------------------------------------------------
 // TASK 6 — Assign letter grades
 // ----------------------------------------------------------
@@ -103,6 +152,26 @@
 //   below 60     → "F"
 //
 // Log: studentNames[i] + ": " + studentScores[i] + " — Grade " + grade
+
+for (let i = 0; i < studentScores.length; i++) {
+    let grade;
+    if (studentScores[i] >= 90) {
+        grade = "A";
+        console.log(studentNames[i] + ": " + studentScores[i] + " — Grade " + grade);
+    } else if (studentScores[i] >= 80) {
+        grade = "B";
+        console.log(studentNames[i] + ": " + studentScores[i] + " — Grade " + grade);  
+    } else if (studentScores[i] >= 70) {
+        grade = "C";
+        console.log(studentNames[i] + ": " + studentScores[i] + " — Grade " + grade);
+    } else if (studentScores[i] >= 60) {
+        grade = "D";
+        console.log(studentNames[i] + ": " + studentScores[i] + " — Grade " + grade);
+    } else {
+        grade = "F";
+        console.log(studentNames[i] + ": " + studentScores[i] + " — Grade " + grade);
+    }
+}
 
 // ----------------------------------------------------------
 // TASK 7 — Add and remove students
@@ -121,6 +190,18 @@
 //   "Student removed: " + removedName
 // Log: "Class size now: " + studentNames.length
 
+studentNames.push("Greg");
+studentScores.push(88);
+
+console.log("New student added: " + studentNames[studentNames.length - 1]);
+console.log("Class size now: " + studentNames.length);
+
+const removedName = studentNames.shift();
+studentScores.shift();
+
+console.log("Student removed: " + removedName);
+console.log("Class size now: " + studentNames.length);
+
 // ----------------------------------------------------------
 // TASK 8 — Connect the dots: find the top student
 // ----------------------------------------------------------
@@ -134,6 +215,15 @@
 // After the loop:
 //   Log: "🏆 Top student: " + studentNames[topStudentIndex]
 //          + " with " + studentScores[topStudentIndex] + " points"
+
+let topStudentIndex = 0;
+for (let i = 0; i < studentScores.length; i++) {
+    if (studentScores[i] > studentScores[topStudentIndex]) {
+        topStudentIndex = i;
+    }
+}
+
+console.log("🏆 Top student: " + studentNames[topStudentIndex] + " with " + studentScores[topStudentIndex] + " points");
 
 // ----------------------------------------------------------
 // ⭐ STRETCH GOAL — Curved grades
@@ -159,3 +249,26 @@
 //
 // Hint: compare studentScores[i] < passingScore &&
 //              curvedScores[i] >= passingScore
+
+const curvePoints = 5;
+let curvedScores = [];
+
+for (let i = 0; i < studentScores.length; i++) {
+    let curvedScore = studentScores[i] + curvePoints;
+    if (curvedScore > 100) {
+        curvedScore = 100;
+    }
+    curvedScores.push(curvedScore);
+}
+
+console.log("Original scores: " + studentScores);
+console.log("Curved scores:   " + curvedScores);
+
+let newPassCount = 0;
+for (let i = 0; i < curvedScores.length; i++) {
+    if (studentScores[i] < passingScore && curvedScores[i] >= passingScore) {
+        newPassCount++;
+    }
+}
+
+console.log("The number of students that are now passing that weren't before: " + newPassCount);
