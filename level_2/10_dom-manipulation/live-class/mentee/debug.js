@@ -8,7 +8,6 @@
 // with <script src="debug.js"></script> in index.html.
 // ============================================================
 
-
 // ----------------------------------------------------------
 // 🟢 DEBUG 1 — Easy
 // ----------------------------------------------------------
@@ -16,7 +15,7 @@
 // but the element is always null. What's wrong?
 
 function renderTitle() {
-  const titleEl = document.getElementById("#page-title");
+  const titleEl = document.getElementById("page-title");
   titleEl.textContent = "My Profile";
 }
 
@@ -25,7 +24,6 @@ renderTitle();
 // What's wrong ↓
 
 // Your fix ↓
-
 
 // ----------------------------------------------------------
 // 🟡 DEBUG 2 — Medium
@@ -47,7 +45,6 @@ renderUsername();
 
 // Your fix ↓
 
-
 // ----------------------------------------------------------
 // 🔴 DEBUG 3 — Hard
 // ----------------------------------------------------------
@@ -56,10 +53,10 @@ renderUsername();
 // There are TWO issues.
 
 function addFirstSkill() {
-  const skillsList = document.querySelector("#skill-list");
+  const skillsList = document.querySelector("#skills-list");
   const li = document.createElement("li");
   li.textContent = "JavaScript";
-  skillsList.appendChild(li);
+  skillsList.prepend(li);
 }
 
 addFirstSkill();

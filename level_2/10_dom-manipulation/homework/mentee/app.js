@@ -92,8 +92,12 @@ const boardName = "Sprint 12 — Task Board";
 // Call renderHeader(tasks) at the bottom.
 
 function renderHeader(taskList) {
-  // your code here
+  document.getElementById("board-title").textContent = boardName;
+  document.getElementById("task-count").textContent =
+    taskList.length + " tasks";
 }
+
+// renderHeader(tasks);
 
 // ----------------------------------------------------------
 // TASK 2 — createTaskCard  (returns a DOM element)
@@ -126,7 +130,34 @@ function renderHeader(taskList) {
 // Task 3 will handle placing it in the right column.
 
 function createTaskCard(task) {
-  // your code here
+  const li = document.createElement("li");
+  li.classList.add("task-card");
+  li.dataset.id = task.id;
+
+  const title = document.createElement("p");
+  title.classList.add("task-title");
+  title.textContent = task.title;
+
+  const meta = document.createElement("div");
+  meta.classList.add("task-meta");
+
+  const priority = document.createElement("span");
+  priority.textContent = task.priority.toUpperCase();
+  priority.classList.add("priority-" + task.priority);
+
+  const assignee = document.createElement("span");
+  assignee.textContent = "👤 " + task.assignee;
+
+  meta.appendChild(priority);
+  meta.appendChild(assignee);
+  li.appendChild(title);
+  li.appendChild(meta);
+
+  if (task.status === "done") {
+    li.classList.add("completed");
+  }
+
+  return li;
 }
 
 // ----------------------------------------------------------
@@ -149,8 +180,23 @@ function createTaskCard(task) {
 // Call renderBoard(tasks) at the bottom.
 
 function renderBoard(taskList) {
-  // your code here
+  const todoList = document.getElementById("list-todo");
+  const inprogressList = document.getElementById("list-inprogress");
+  const doneList = document.getElementById("list-done");
+
+  taskList.forEach((task) => {
+    const taskCard = createTaskCard(task);
+    if (task.status === "todo") {
+      todoList.appendChild(taskCard);
+    } else if (task.status === "inprogress") {
+      inprogressList.appendChild(taskCard);
+    } else {
+      doneList.appendChild(taskCard);
+    }
+  });
 }
+
+// renderBoard(tasks);
 
 // ----------------------------------------------------------
 // TASK 4 — updateCounts
@@ -170,8 +216,16 @@ function renderBoard(taskList) {
 // Call updateCounts(tasks) at the bottom.
 
 function updateCounts(taskList) {
-  // your code here
+  const completedTasks = taskList.filter((task) => task.status === "done");
+  const pendingTasks = taskList.filter((task) => task.status !== "done");
+
+  document.getElementById("completed-count").textContent =
+    "✅ " + completedTasks.length + " done";
+  document.getElementById("pending-count").textContent =
+    "⏳ " + pendingTasks.length + " pending";
 }
+
+// updateCounts(tasks);
 
 // ----------------------------------------------------------
 // TASK 5 — addRemoveButtons
@@ -191,8 +245,22 @@ function updateCounts(taskList) {
 // For now just build and attach the buttons so they appear.
 
 function addRemoveButtons() {
-  // your code here
+  const allTaskCards = document.querySelectorAll(".task-card");
+
+  allTaskCards.forEach((card) => {
+    const existingButton = card.querySelector(".remove-btn"); // added this to prevent double remove buttons from appearing after calling addNewTask() since it also calls addRemoveButtons()
+
+    if (!existingButton) {
+      const button = document.createElement("button");
+      button.textContent = "✕";
+      button.classList.add("remove-btn");
+
+      card.appendChild(button);
+    }
+  });
 }
+
+// addRemoveButtons();
 
 // ----------------------------------------------------------
 // TASK 6 — highlightHighPriority
@@ -209,8 +277,12 @@ function addRemoveButtons() {
 // This makes high-priority labels appear bolder.
 
 function highlightHighPriority() {
-  // your code here
+  const allHighPriority = document.querySelectorAll(".priority-high");
+
+  allHighPriority.forEach((element) => (element.style.fontWeight = "800"));
 }
+
+// highlightHighPriority();
 
 // ----------------------------------------------------------
 // TASK 7 — addNewTask  (createElement full workflow)
@@ -233,8 +305,31 @@ function highlightHighPriority() {
 // Watch a new card appear in the To Do column with a ✕ button.
 
 function addNewTask(title, assignee, priority = "medium", status = "todo") {
-  // your code here
+  const newTask = {
+    id: Date.now(),
+    title,
+    assignee,
+    priority,
+    status,
+  };
+
+  tasks.push(newTask);
+  const taskCard = createTaskCard(newTask);
+
+  if (newTask.status === "todo") {
+    document.getElementById("list-todo").appendChild(taskCard);
+  } else if (newTask.status === "inprogress") {
+    document.getElementById("list-inprogress").appendChild(taskCard);
+  } else {
+    document.getElementById("list-done").appendChild(taskCard);
+  }
+
+  updateCounts(tasks);
+  addRemoveButtons();
+  highlightHighPriority();
 }
+
+// addNewTask("Write unit tests", "Carlos", "high");
 
 // ----------------------------------------------------------
 // TASK 8 — Connect the dots: renderAll
@@ -253,8 +348,15 @@ function addNewTask(title, assignee, priority = "medium", status = "todo") {
 // each function individually.
 
 function renderAll() {
-  // your code here
+  renderHeader(tasks);
+  renderBoard(tasks);
+  updateCounts(tasks);
+  addRemoveButtons();
+  highlightHighPriority();
 }
+
+renderAll();
+addNewTask("Write unit tests", "Carlos", "high");
 
 // ----------------------------------------------------------
 // ⭐ STRETCH GOAL — markComplete
@@ -275,6 +377,28 @@ function renderAll() {
 // Call markComplete(1) to mark task 1 as done.
 //
 // Write a comment: what is dataset used for?
+
+function markComplete(taskId) {
+  const task = tasks.find((task) => task.id === taskId);
+
+  if (task) {
+    task.status = "done";
+    const taskCard = document.querySelector("[data-id='" + taskId + "']");
+
+    if (taskCard) {
+      taskCard.classList.add("completed");
+      document.getElementById("list-done").appendChild(taskCard);
+    }
+    updateCounts(tasks);
+  }
+}
+
+markComplete(1);
+
+// dataset is used to store and access custom data on a DOM element. 
+// Like in createTaskCard():
+// 'li.dataset.id = task.id'
+// dataset is used to store a task's id on its task card, linking a DOM elementt to the corresponding task object, allowing tthe card to be found and identified later
 
 // ============================================================
 // CALL YOUR FUNCTIONS HERE

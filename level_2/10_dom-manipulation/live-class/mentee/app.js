@@ -113,8 +113,6 @@ function renderHeader() {
   pageTitle.textContent = profile.firstName + "'s Dev Profile";
 }
 
-renderHeader();
-
 // TASK 3
 // Declare a function called renderProfileCard.
 // Inside, select and fill in:
@@ -140,8 +138,6 @@ function renderProfileCard() {
   userTitle.textContent = profile.title;
   userLocation.textContent = profile.location;
 }
-
-renderProfileCard();
 
 // ----------------------------------------------------------
 // PART 3 — CHANGING STYLES
@@ -193,8 +189,6 @@ function renderStatusBadge(status) {
   }
 }
 
-renderStatusBadge(profile.status);
-
 // TASK 5
 // Declare a function called renderStats.
 // Inside:
@@ -203,7 +197,11 @@ renderStatusBadge(profile.status);
 //
 // Call renderStats() at the bottom.
 
-function renderStats() {}
+function renderStats() {
+  document.getElementById("stat-projects").textContent = profile.stats.projects;
+  document.getElementById("stat-commits").textContent = profile.stats.commits;
+  document.getElementById("stat-reviews").textContent = profile.stats.reviews;
+}
 
 // TASK 6 — classList.toggle (dark mode preview)
 // Declare a function called toggleDarkMode.
@@ -220,8 +218,18 @@ function renderStats() {}
 // from classList.add?
 
 function toggleDarkMode() {
-  // your code here
+  document.body.classList.toggle("dark");
+
+  console.log("Dark mode: " + document.body.classList.contains("dark"));
 }
+
+toggleDarkMode();
+
+toggleDarkMode();
+
+const themeButton = document.getElementById("theme-btn");
+
+themeButton.addEventListener("click", toggleDarkMode);
 
 // ----------------------------------------------------------
 // PART 4 — CREATING AND INSERTING ELEMENTS
@@ -240,6 +248,7 @@ function toggleDarkMode() {
 //   parent.appendChild(el)
 //   → adds it as the LAST child of parent
 //
+
 //   parent.prepend(el)
 //   → adds it as the FIRST child of parent
 //
@@ -261,7 +270,12 @@ function toggleDarkMode() {
 // Call renderSkills(profile.skills) at the bottom.
 
 function renderSkills(skillsArray) {
-  // your code here
+  const skillsList = document.getElementById("skills-list");
+  skillsArray.forEach((skill) => {
+    const li = document.createElement("li");
+    li.textContent = skill;
+    skillsList.appendChild(li);
+  });
 }
 
 // TASK 8
@@ -277,7 +291,11 @@ function renderSkills(skillsArray) {
 // Call addSkill("Docker") to add another.
 
 function addSkill(skillName) {
-  // your code here
+  const addSkill = document.getElementById("skills-list");
+  const newLi = document.createElement("li");
+  newLi.textContent = skillName;
+
+  addSkill.appendChild(newLi);
 }
 
 // ----------------------------------------------------------
@@ -295,7 +313,16 @@ function addSkill(skillName) {
 // Call removeFirstSkill() once and watch the first skill disappear.
 
 function removeFirstSkill() {
-  // your code here
+  const removeFirstSkill = document.getElementById("skills-list");
+  const firstChild = removeFirstSkill.firstElementChild;
+  if (firstChild) {
+    firstChild.remove();
+    console.log(
+      "Removed skill. Skills remaining: " + removeFirstSkill.children.length,
+    );
+  } else {
+    console.log("No skills available");
+  }
 }
 
 // TASK 10 — Full render function (connect all parts)
@@ -312,7 +339,11 @@ function removeFirstSkill() {
 // function that orchestrates rendering the whole page.
 
 function renderProfile() {
-  // renderHeader();
+  renderHeader();
+  renderProfileCard();
+  renderStatusBadge(profile.status);
+  renderStats();
+  renderSkills(profile.skills);
 }
 
 // ============================================================
@@ -323,4 +354,12 @@ function renderProfile() {
 // Then call addSkill() with a new skill name.
 // Then call removeFirstSkill() to test removal.
 // Then call selectElements() to inspect the DOM in the console.
+
+renderProfile();
+toggleDarkMode();
+toggleDarkMode();
+addSkill("TypeScript");
+addSkill("Docker");
+addSkill("C++");
+removeFirstSkill();
 selectElements();
