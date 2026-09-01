@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekly Shift and Goal Planner</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <h1 class="app-title">Weekly Shift and Goal Planner</h1>
+
+        <div class="header-info">
+          <p id="current-date">Date</p>
+          <p id="current-time">Time</p>
+        </div>
+      </header>
+
+      <div class="app-layout">
+        <aside class="sidebar">
+          <nav class="sidebar-nav">
+            <button class="nav-btn" data-view="dashboard">Dashboard</button>
+
+            <button class="nav-btn" data-view="planner">Planner</button>
+
+            <button class="nav-btn" data-view="goals">Goals</button>
+
+            <button class="nav-btn" data-view="previous-weeks">
+              Previous Weeks
+            </button>
+
+            <button class="nav-btn" data-view="contact">Contact</button>
+          </nav>
+        </aside>
+
+        <main class="main-content">
+          <section id="dashboard-view" class="view">
+            <h2>Dashboard</h2>
+          </section>
+
+          <section id="planner-view" class="view">
+            <div class="planner-header">
+              <h2>Weekly Planner</h2>
+
+              <p id="week-range">Month, Week, Start Date - End Date</p>
+            </div>
+
+            <div class="planner-layout">
+              <div id="weekly-planner" class="weekly-planner">
+                <div class="day-column"></div>
+              </div>
+
+              <aside class="goals-tracker">
+                <h2>Goals Tracker</h2>
+
+                <div id="goal-list"></div>
+              </aside>
+            </div>
+          </section>
+
+          <section id="goals-view" class="view">
+            <h2>Goals</h2>
+          </section>
+
+          <section id="previous-weeks-view" class="view">
+            <h2>Previous Weeks</h2>
+          </section>
+
+          <section id="contact-view" class="view">
+            <h2>Contact</h2>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
