@@ -205,10 +205,10 @@ function addSkillToPage(skillName) {
   const skillsList = document.getElementById("skills-list");
   const li = document.createElement("li");
   li.textContent = skillName;
-  li.addEventListener("click", function () {
-    li.remove();
-    updateSkillCount();
-  });
+  // li.addEventListener("click", function () {
+  //   li.remove();
+  //   updateSkillCount();
+  // });
 
   skillsList.appendChild(li);
   updateSkillCount();
@@ -252,10 +252,18 @@ document
 // Wire it up to document.
 
 function handleKeyDown(event) {
-  // your code here
+  const keyOutput = document.getElementById("key-output");
+  keyOutput.textContent = "Key: " + event.key;
+
+  if (event.key === "d") {
+    handleThemeToggle();
+  }
+  if (event.key === "Escape") {
+    document.getElementById("skill-input").value = "";
+  }
 }
 
-// wire up to document here
+document.addEventListener("keydown", handleKeyDown);
 
 // ----------------------------------------------------------
 // PART 5 — EVENT DELEGATION
@@ -297,10 +305,15 @@ function handleKeyDown(event) {
 // event.target and event.currentTarget here?
 
 function handleSkillClick(event) {
-  // your code here
+  if (event.target.tagName === "LI") {
+    event.target.remove();
+    updateSkillCount();
+  }
 }
 
-// wire up the event listener here
+document
+  .getElementById("skills-list")
+  .addEventListener("click", handleSkillClick);
 
 // ----------------------------------------------------------
 // PART 6 — PAGE INITIALISATION
@@ -323,9 +336,12 @@ function handleSkillClick(event) {
 // ABOVE init() — they run as the script loads.
 
 function init() {
-  // your code here
-}
+  initialSkills.forEach((skill) => addSkillToPage(skill));
 
+  const bioEl = document.getElementById("bio-input");
+  handleBioInput({ target: bioEl });
+}
+init();
 // ============================================================
 // WIRE UP ALL LISTENERS (above init)
 // ============================================================
@@ -335,7 +351,6 @@ function init() {
 // ============================================================
 // START THE PAGE
 // ============================================================
-init();
 
 //FOOTNOTE
 //removeEventListener removes a listener when you no longer need it.
