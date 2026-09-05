@@ -93,7 +93,51 @@ const tasks = [
 //   7. Return the <li>
 
 function createTaskCard(task) {
-  // your code here
+  const li = document.createElement("li");
+  li.classList.add("task-card");
+  li.dataset.id = task.id;
+  li.dataset.priority = task.priority;
+
+  const title = document.createElement("p");
+  title.classList.add("task-title");
+  title.textContent = task.title;
+
+  const meta = document.createElement("div");
+  meta.classList.add("task-meta");
+
+  const priority = document.createElement("span");
+  priority.classList.add("priority-" + task.priority);
+  priority.textContent = task.priority.toUpperCase();
+
+  const assignee = document.createElement("span");
+  assignee.textContent = "👤 " + task.assignee;
+
+  meta.appendChild(priority);
+  meta.appendChild(assignee);
+
+  const actions = document.createElement("div");
+  actions.classList.add("card-actions");
+
+  const completeButton = document.createElement("button");
+  completeButton.classList.add("complete-btn");
+  completeButton.textContent = "✅ Complete";
+
+  const removeButton = document.createElement("button");
+  removeButton.classList.add("remove-btn");
+  removeButton.textContent = "🗑️ Remove";
+
+  actions.appendChild(completeButton);
+  actions.appendChild(removeButton);
+
+  if (task.status === "done") {
+    li.classList.add("completed");
+  }
+
+  li.appendChild(title);
+  li.appendChild(meta);
+  li.appendChild(actions);
+
+  return li;
 }
 
 // ----------------------------------------------------------
@@ -130,11 +174,43 @@ function createTaskCard(task) {
 //   #count-done       → done.length          (just the number — no label)
 
 function updateCounts(taskList) {
-  // your code here
+  const done = taskList.filter((task) => task.status === "done");
+  const pending = taskList.filter((task) => task.status !== "done");
+  const todo = taskList.filter((task) => task.status === "todo");
+  const inprogress = taskList.filter((task) => task.status === "inprogress");
+
+  document.getElementById("task-count").textContent =
+    taskList.length + " tasks";
+  document.getElementById("completed-count").textContent =
+    "✅ " + done.length + " done";
+  document.getElementById("pending-count").textContent =
+    "⏳ " + pending.length + " pending";
+  document.getElementById("count-todo").textContent = todo.length;
+  document.getElementById("count-inprogress").textContent = inprogress.length;
+  document.getElementById("count-done").textContent = done.length;
 }
 
 function renderBoard(taskList) {
-  // your code here
+  const todoList = document.getElementById("list-todo");
+  const inprogressList = document.getElementById("list-inprogress");
+  const doneList = document.getElementById("list-done");
+
+  todoList.innerHTML = "";
+  inprogressList.innerHTML = "";
+  doneList.innerHTML = "";
+
+  taskList.forEach((task) => {
+    const taskCard = createTaskCard(task);
+    if (task.status === "todo") {
+      todoList.appendChild(taskCard);
+    } else if (task.status === "inprogress") {
+      inprogressList.appendChild(taskCard);
+    } else {
+      doneList.appendChild(taskCard);
+    }
+  });
+
+  updateCounts(taskList);
 }
 
 // ----------------------------------------------------------
@@ -161,11 +237,38 @@ function renderBoard(taskList) {
 //     .addEventListener("click", handleAddTask);
 
 function handleAddTask() {
-  // your code here
+  const titleInput = document.getElementById("task-title-input");
+  const assigneeInput = document.getElementById("task-assignee-input");
+
+  const title = titleInput.value.trim();
+  const assignee = assigneeInput.value.trim();
+  const priority = document.getElementById("task-priority-input").value;
+  const status = document.getElementById("task-status-input").value;
+
+  if (!title) {
+    console.log("Title is required");
+    return;
+  }
+
+  const task = {
+    id: Date.now(),
+    title,
+    assignee: assignee || "Unassigned",
+    priority,
+    status,
+  };
+
+  tasks.push(task);
+  renderBoard(tasks);
+
+  titleInput.value = "";
+  assigneeInput.value = "";
 }
 
 // wire up here
-
+document
+  .getElementById("add-task-btn")
+  .addEventListener("click", handleAddTask);
 // ----------------------------------------------------------
 // TASK 4 — handleBoardClick (event delegation for complete + remove)
 // ----------------------------------------------------------
@@ -204,10 +307,35 @@ function handleAddTask() {
 // Write a comment: why use .closest() instead of event.target directly?
 
 function handleBoardClick(event) {
-  // your code here
+  const target = event.target;
+  const card = target.closest(".task-card");
+
+  if (!card) {
+    return;
+  }
+
+  const taskId = parseInt(card.dataset.id);
+  const task = tasks.find((task) => task.id === taskId);
+
+  if (target.classList.contains("complete-btn")) {
+    task.status = "done";
+    card.classList.add("completed");
+    document.getElementById("list-done").appendChild(card);
+  }
+
+  if (target.classList.contains("remove-btn")) {
+    const index = tasks.findIndex((t) => t.id === taskId);
+    tasks.splice(index, 1);
+    card.remove();
+  }
+
+  updateCounts(tasks);
 }
 
 // wire up here
+document.querySelector(".board").addEventListener("click", handleBoardClick);
+
+// We use .closest() instead of event.target since .closest would access the whole parent task card and its data to be modified, while .target would access just the button that was clicked.
 
 // ----------------------------------------------------------
 // TASK 5 — handleFilterClick (filter buttons)
@@ -240,10 +368,33 @@ function handleBoardClick(event) {
 // individual listeners on each button?
 
 function handleFilterClick(event) {
-  // your code here
+  const filter = event.target.dataset.filter;
+  if (!filter) {
+    return;
+  }
+
+  document
+    .querySelectorAll(".filter-btn")
+    .forEach((element) => element.classList.remove("active"));
+  event.target.classList.add("active");
+
+  document.querySelectorAll(".task-card").forEach((card) => {
+    if (filter === "all") {
+      card.classList.remove("hidden");
+    } else if (card.dataset.priority === filter) {
+      card.classList.remove("hidden");
+    } else {
+      card.classList.add("hidden");
+    }
+  });
 }
 
 // wire up here
+document
+  .querySelector(".header-right")
+  .addEventListener("click", handleFilterClick);
+
+// Delegation is used as it allows for one click listener on the parent instead of adding a listener to every child filter button.
 
 // ----------------------------------------------------------
 // TASK 6 — handleKeyDown (keyboard shortcuts)
@@ -263,11 +414,19 @@ function handleFilterClick(event) {
 // Wire it up to document.
 
 function handleKeyDown(event) {
-  // your code here
+  if (event.key === "Escape") {
+    document.getElementById("task-title-input").value = "";
+    document.getElementById("task-assignee-input").value = "";
+    console.log("Inputs cleared");
+  }
+
+  if (event.key === "Enter" && event.target.id === "task-title-input") {
+    handleAddTask();
+  }
 }
 
 // wire up here
-
+document.addEventListener("keydown", handleKeyDown);
 // ----------------------------------------------------------
 // TASK 7 — Connect the dots: init
 // ----------------------------------------------------------
@@ -277,7 +436,7 @@ function handleKeyDown(event) {
 // Call init() at the bottom.
 
 function init() {
-  // your code here
+  renderBoard(tasks);
 }
 
 // ----------------------------------------------------------
@@ -304,6 +463,23 @@ function init() {
 //
 // Write a comment: why use "input" and not "change" for live search?
 
+function handleSearch(event) {
+  const query = event.target.value.toLowerCase().trim();
+
+  document.querySelectorAll(".task-card").forEach((card) => {
+    const title = card.querySelector(".task-title").textContent.toLowerCase();
+
+    if (title.includes(query)) {
+      card.classList.remove("hidden");
+    } else {
+      card.classList.add("hidden");
+    }
+  });
+}
+
+document.getElementById("search-input").addEventListener("input", handleSearch);
+
+// We use "input" since it fires on every keystroke, this lets the search query get updated live every time the user types or changes the input, while with "change", you'd have to wait until the value is done being entered
 // ============================================================
 // WIRE UP ALL LISTENERS (above init)
 // ============================================================
