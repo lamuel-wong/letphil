@@ -26,8 +26,10 @@
   <body>
     <header class="topbar">
       <a class="back" href="../index.html">← Practice Lab</a>
-      <span class="request-line">GET api.github.com/users/{username}</span>
-      <span class="tool-badge">fetch + .then</span>
+      <span class="request-line"
+        >await axios.get( api.github.com/users/{username} )</span
+      >
+      <span class="tool-badge">axios + async/await</span>
     </header>
 
     <main class="wrap">
@@ -64,6 +66,8 @@
       requests/hour per IP).
     </footer>
 
-    <script src="debug.js"></script>
+    <!-- ⚠️ ORDER MATTERS: axios must load BEFORE app.js -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>

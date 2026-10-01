@@ -5,7 +5,6 @@
 // Fix each and explain what was wrong as a comment.
 // ============================================================
 
-
 // ----------------------------------------------------------
 // 🟢 DEBUG 1 — Easy  (from 🐙 GitHub Portfolio Checker)
 // ----------------------------------------------------------
@@ -14,7 +13,7 @@
 
 fetch("https://api.github.com/users/torvalds")
   .then((response) => {
-    response.json();
+    return response.json();
   })
   .then((user) => {
     console.log(`${user.login} has ${user.public_repos} public repos`);
@@ -23,7 +22,6 @@ fetch("https://api.github.com/users/torvalds")
 // What's wrong ↓
 
 // Your fix ↓
-
 
 // ----------------------------------------------------------
 // 🟡 DEBUG 2 — Medium  (from 📚 Code Concepts)
@@ -38,7 +36,7 @@ fetch("https://api.github.com/users/torvalds")
 fetch("https://api.github.com/search/repositories?q=closures&per_page=5")
   .then((response) => response.json())
   .then((data) => {
-    data.forEach((repo) => {
+    data.items.forEach((repo) => {
       console.log(repo.full_name);
     });
   });
@@ -46,7 +44,6 @@ fetch("https://api.github.com/search/repositories?q=closures&per_page=5")
 // What's wrong ↓
 
 // Your fix ↓
-
 
 // ----------------------------------------------------------
 // 🔴 DEBUG 3 — Hard  (from 🎨 Palette Builder)
