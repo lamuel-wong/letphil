@@ -70,7 +70,12 @@ function getWeatherDescription(code) {
 // This is the same helper from the live class.
 
 function safeFetch(url) {
-  // your code here
+  return fetch(url).then((response) => {
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status + ": " + response.statusText);
+    }
+    return response.json();
+  });
 }
 
 // ----------------------------------------------------------
@@ -99,27 +104,30 @@ function getEl(id) {
 }
 
 function showSpinner(msg) {
-  // your code here
+  getEl("loading-spinner").classList.remove("hidden");
+  getEl("loading-message").textContent = msg;
 }
 
 function hideSpinner() {
-  // your code here
+  getEl("loading-spinner").classList.add("hidden");
 }
 
 function showError(msg) {
-  // your code here
+  getEl("error-box").classList.remove("hidden");
+  getEl("error-message").textContent = msg;
 }
 
 function hideError() {
-  // your code here
+  getEl("error-box").classList.add("hidden");
 }
 
 function showStatus(msg, type) {
-  // your code here
+  getEl("status-bar").className = "status-bar " + (type || "");
+  getEl("status-message").textContent = msg;
 }
 
 function hideStatus() {
-  // your code here
+  getEl("status-bar").classList.add("hidden");
 }
 
 // ----------------------------------------------------------
@@ -134,11 +142,18 @@ function hideStatus() {
 //              + "&current_weather=true"
 
 function buildWeatherUrl(city) {
-  // your code here
+  return (
+    WEATHER_API +
+    "?latitude=" +
+    city.lat +
+    "&longitude=" +
+    city.lon +
+    "&current_weather=true"
+  );
 }
 
 // Test it:
-// console.log(buildWeatherUrl(CITIES["london"]));
+console.log(buildWeatherUrl(CITIES["london"]));
 // Expected: "https://api.open-meteo.com/v1/forecast?latitude=51.51&longitude=-0.13&current_weather=true"
 
 // ----------------------------------------------------------
@@ -171,7 +186,68 @@ function buildWeatherUrl(city) {
 // Return the card.
 
 function createWeatherCard(cityName, data) {
-  // your code here
+  const weatherCard = document.createElement("div");
+  weatherCard.classList.add("weather-card");
+
+  const cityNameP = document.createElement("p");
+  cityNameP.classList.add("city-name");
+  cityNameP.textContent = cityName;
+
+  const coordText = document.createElement("p");
+  coordText.classList.add("coord-text");
+  coordText.textContent = "Lat: " + data.latitude + " | Lon: " + data.longitude;
+
+  const weatherIcon = document.createElement("span");
+  weatherIcon.classList.add("weather-icon");
+  weatherIcon.textContent = getWeatherDescription(
+    data.current_weather.weathercode,
+  ).icon;
+
+  const temperature = document.createElement("p");
+  temperature.classList.add("temperature");
+  temperature.textContent = data.current_weather.temperature + "°C";
+
+  const condition = document.createElement("p");
+  condition.classList.add("condition");
+  condition.textContent = getWeatherDescription(
+    data.current_weather.weathercode,
+  ).label;
+
+  const weatherStats = document.createElement("div");
+  weatherStats.classList.add("weather-stats");
+
+  const windspeedStat = document.createElement("div");
+  const windspeedLabel = document.createElement("p");
+  windspeedLabel.classList.add("stat-label");
+  windspeedLabel.textContent = "WIND SPEED";
+  const windspeedValue = document.createElement("p");
+  windspeedValue.classList.add("stat-value");
+  windspeedValue.textContent = data.current_weather.windspeed + " km/h";
+
+  windspeedStat.append(windspeedLabel, windspeedValue);
+
+  const windDirStat = document.createElement("div");
+  const windDirLabel = document.createElement("p");
+  windDirLabel.classList.add("stat-label");
+  windDirLabel.textContent = "WIND DIRECTION";
+  const windDirValue = document.createElement("p");
+  windDirValue.classList.add("stat-value");
+  windDirValue.textContent = data.current_weather.winddirection + "°";
+
+  windDirStat.append(windDirLabel, windDirValue);
+
+  weatherStats.append(windspeedStat, windDirStat);
+
+  weatherCard.append(
+    cityNameP,
+    coordText,
+    weatherIcon,
+    temperature,
+    condition,
+    weatherStats,
+  );
+
+  return weatherCard;
 }
 
 // ----------------------------------------------------------
@@ -200,7 +276,32 @@ function createWeatherCard(cityName, data) {
 //      })
 
 function fetchWeatherForCity(cityKey) {
-  // your code here
+  const city = CITIES[cityKey];
+  if (!city) {
+    showError("City not found");
+    return;
+  }
+
+  const loadingCard = document.createElement("div");
+  loadingCard.classList.add("card-loading");
+  loadingCard.id = "loading-" + cityKey;
+  loadingCard.innerHTML = `<div class="spin"></div><span>Loading ${city.name}...</span>`;
+
+  const weatherGrid = getEl("weather-grid");
+  weatherGrid.appendChild(loadingCard);
+
+  const url = buildWeatherUrl(city);
+
+  safeFetch(url)
+    .then(function (data) {
+      getEl("loading-" + cityKey)?.remove();
+      const weatherCard = createWeatherCard(city.name, data);
+      weatherGrid.appendChild(weatherCard);
+    })
+    .catch(function (err) {
+      getEl("loading-" + cityKey)?.remove();
+      showError("Failed to fetch " + city.name + ": " + err.message);
+    });
 }
 
 // ----------------------------------------------------------
@@ -219,7 +320,14 @@ function fetchWeatherForCity(cityKey) {
 //     .addEventListener("click", handleFetchWeather)
 
 function handleFetchWeather() {
-  // your code here
+  const cityKey = getEl("city-select").value;
+  if (!cityKey) {
+    showError("Please select a city");
+    return;
+  }
+
+  hideError();
+  fetchWeatherForCity(cityKey);
 }
 
 document
@@ -248,7 +356,12 @@ document
 //     .addEventListener("click", fetchAllCities)
 
 function fetchAllCities() {
-  // your code here
+  getEl("weather-grid").innerHTML = "";
+  hideError();
+  showStatus("🌍 Fetching all cities...", "");
+  const cityKeys = Object.keys(CITIES);
+  cityKeys.forEach((key) => fetchWeatherForCity(key));
+  showStatus("✅ All cities loaded", "success");
 }
 
 document
@@ -264,7 +377,10 @@ document
 //   - Reset #city-select to ""
 
 document.getElementById("clear-btn").addEventListener("click", function () {
-  // your code here
+  getEl("weather-grid").innerHTML = "";
+  hideError();
+  hideStatus();
+  getEl("city-select").value = "";
 });
 
 // ----------------------------------------------------------
@@ -306,5 +422,30 @@ document.getElementById("clear-btn").addEventListener("click", function () {
 // calling fetchWeatherForCity in a loop?
 
 function fetchAllCitiesParallel() {
-  // your code here
+  getEl("weather-grid").innerHTML = "";
+  showSpinner("Fetching all cities...");
+
+  const cityKeys = Object.keys(CITIES);
+
+  const promises = cityKeys.map(function (key) {
+    return safeFetch(buildWeatherUrl(CITIES[key])).then(function (data) {
+      return { key, data };
+    });
+  });
+
+  Promise.all(promises)
+    .then(function (results) {
+      results.forEach(function (result) {
+        const city = CITIES[result.key];
+        const card = createWeatherCard(city.name, result.data);
+        getEl("weather-grid").appendChild(card);
+      });
+      showStatus("✅ All " + results.length + " cities loaded", "success");
+    })
+    .catch(function (err) {
+      showError("One or more cities failed: " + err.message);
+    })
+    .finally(() => hideSpinner());
 }
+
+// Promise.all waits for all of the fetches to be finished first before running what's in .then, while fetchWeatherForCity doesn't and shows each card individually as they finish being fetched
