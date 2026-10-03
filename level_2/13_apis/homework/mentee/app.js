@@ -440,7 +440,7 @@ function describeWeather(weathercode) {
     weatherDesc = "🌫️ Foggy";
   } else if (weathercode < 80 && weathercode > 3) {
     weatherDesc = "🌧️ Rain or drizzle";
-  } else if (weatherCode >= 80) {
+  } else if (weathercode >= 80) {
     weatherDesc = "⛈️ Stormy";
   } else {
     console.error("Invalid weather code");
@@ -621,11 +621,10 @@ function analyseUser(user, posts) {
   }, posts[0]);
 
   console.log("Shortest title: " + shortestPost.title);
-  console.log(
-    posts.forEach((post) => {
-      console.log("  • " + post.title);
-    }),
-  );
+
+  posts.forEach((post) => {
+    console.log("  • " + post.title);
+  });
 }
 
 analyseUser(userMock, postsMock);
