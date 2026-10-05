@@ -19,57 +19,70 @@
       </header>
 
       <div class="app-layout">
+        <!-- Side Navigation Bar -->
         <aside class="sidebar">
           <nav class="sidebar-nav">
-            <button class="nav-btn" data-view="dashboard">Dashboard</button>
-
-            <button class="nav-btn" data-view="planner">Planner</button>
-
-            <button class="nav-btn" data-view="goals">Goals</button>
-
-            <button class="nav-btn" data-view="previous-weeks">
-              Previous Weeks
-            </button>
-
-            <button class="nav-btn" data-view="contact">Contact</button>
+            <a href="#dashboard" class="nav-link">Dashboard</a>
+            <a href="#planner" class="nav-link">Weekly Planner</a>
+            <a href="#goals" class="nav-link">Goals</a>
+            <a href="#previous-weeks" class="nav-link">Previous Weeks</a>
+            <a href="#contact" class="nav-link">Contact</a>
           </nav>
         </aside>
 
+        <!-- Main Body -->
         <main class="main-content">
-          <section id="dashboard-view" class="view">
-            <h2>Dashboard</h2>
+          <!-- Dashboard -->
+          <section id="dashboard" class="dashboard">
+            <!-- summary cards -->
+            <div class="dashboard-summary">
+              <article class="summary-card">
+                <h2>Goals Completed</h2>
+                <p id="goals-completed-value">0 / 0</p>
+              </article>
+
+              <article class="summary-card">
+                <h2>Study Hours</h2>
+                <p id="study-hours-value">0 h</p>
+              </article>
+
+              <article class="summary-card">
+                <h2>Upcoming Shift</h2>
+                <p id="next-shift-value">None</p>
+              </article>
+            </div>
           </section>
 
-          <section id="planner-view" class="view">
-            <div class="planner-header">
-              <h2>Weekly Planner</h2>
-
-              <p id="week-range">Month, Week, Start Date - End Date</p>
-            </div>
-
-            <div class="planner-layout">
-              <div id="weekly-planner" class="weekly-planner">
-                <div class="day-column"></div>
+          <!-- Weekly Planner -->
+          <div class="planner-layout">
+            <section id="planner" class="planner">
+              <div class="section-header">
+                <h2>Weekly Planner</h2>
+                <p id="week-range">Month Day - Month Day</p>
               </div>
 
-              <aside class="goals-tracker">
-                <h2>Goals Tracker</h2>
+              <div id="weekly-planner" class="weekly-planner">
+                <!-- Day columns and schedule cards rendered by JS  -->
+              </div>
+            </section>
 
-                <div id="goal-list"></div>
-              </aside>
-            </div>
-          </section>
+            <!-- Goal Tracker -->
+            <section id="goals" class="goals-tracker">
+              <h2>Goals Tracker</h2>
 
-          <section id="goals-view" class="view">
-            <h2>Goals</h2>
-          </section>
+              <div id="goal-list"></div>
+            </section>
 
-          <section id="previous-weeks-view" class="view">
+          </div>
+
+          <section id="previous-weeks" class="previous-weeks">
             <h2>Previous Weeks</h2>
+
+            <div id="previous-weeks-list"></div>
           </section>
 
-          <section id="contact-view" class="view">
-            <h2>Contact</h2>
+          <section id="contact" class="contact">
+            <h2>Feedback / Contact</h2>
           </section>
         </main>
       </div>
