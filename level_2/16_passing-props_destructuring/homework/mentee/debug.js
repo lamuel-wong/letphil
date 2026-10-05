@@ -19,22 +19,32 @@ const team = [
 // MemberCard. Instead, every card behaves the same way no
 // matter what onContact you pass in. What's wrong?
 
+// function TeamList(props) {
+//   const container = document.createElement("div");
+//   props.members.forEach(function (member) {
+//     const card = MemberCard({
+//       member: member,
+//       onContact: function (email) { console.log("Hardcoded:", email); },
+//     });
+//     container.appendChild(card);
+//   });
+//   return container;
+// }
+
+// What's wrong ↓
+// The onContact passed on line 27 is hardcoded
+// Your fix ↓
 function TeamList(props) {
   const container = document.createElement("div");
   props.members.forEach(function (member) {
     const card = MemberCard({
       member: member,
-      onContact: function (email) { console.log("Hardcoded:", email); },
+      onContact: props.onContact,
     });
     container.appendChild(card);
   });
   return container;
 }
-
-// What's wrong ↓
-
-// Your fix ↓
-
 
 // ----------------------------------------------------------
 // 🔴 DEBUG 2 — Rest pattern
@@ -47,5 +57,8 @@ function TeamList(props) {
 // console.log(rest);
 
 // What's wrong ↓
-
+// There's a syntax error on line 55 as you cannot use the rest operator outside of a single destructuring pattern 
 // Your fix ↓
+const { name, ...rest } = team[0];
+console.log(name);
+console.log(rest);
