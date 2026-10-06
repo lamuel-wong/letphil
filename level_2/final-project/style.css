@@ -98,6 +98,14 @@ body {
 
 } */
 
+/* .schedule-form {
+  display: none;
+}
+
+.schedule-form.active {
+  display: grid;
+} */
+
 .goals-tracker {
   border: 1px solid #ccc;
   padding: 1rem;

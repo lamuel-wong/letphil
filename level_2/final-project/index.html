@@ -34,7 +34,7 @@
         <main class="main-content">
           <!-- Dashboard -->
           <section id="dashboard" class="dashboard">
-            <!-- summary cards -->
+            <!-- Summary cards -->
             <div class="dashboard-summary">
               <article class="summary-card">
                 <h2>Goals Completed</h2>
@@ -60,6 +60,46 @@
                 <h2>Weekly Planner</h2>
                 <p id="week-range">Month Day - Month Day</p>
               </div>
+              <form id="schedule-form" class="schedule-form">
+                <div class="form-group">
+                  <label for="schedule-title">Title</label>
+                  <input id="schedule-title" type="text" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="schedule-type">Type</label>
+                  <select id="schedule-type" required>
+                    <option value="work">Work</option>
+                    <option value="study">Study</option>
+                    <option value="gym">Gym</option>
+                    <option value="commitment">Commitment</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="schedule-date">Date</label>
+                  <input id="schedule-date" type="date" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="schedule-start-time">Start Time</label>
+                  <input id="schedule-start-time" type="time" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="schedule-end-time">End Time</label>
+                  <input id="schedule-end-time" type="time" required />
+                </div>
+
+                <button id="schedule-submit-btn" type="submit">
+                  Add Schedule
+                </button>
+
+                <button id="cancel-edit-btn" type="button" hidden>
+                  Cancel
+                </button>
+              </form>
 
               <div id="weekly-planner" class="weekly-planner">
                 <!-- Day columns and schedule cards rendered by JS  -->
@@ -72,7 +112,6 @@
 
               <div id="goal-list"></div>
             </section>
-
           </div>
 
           <section id="previous-weeks" class="previous-weeks">
