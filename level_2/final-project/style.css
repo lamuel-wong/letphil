@@ -111,6 +111,16 @@ body {
   padding: 1rem;
 }
 
+.goal-card {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.goal-progress-bar {
+  width: 100%;
+  height: 12px;
+}
+
 @media (max-width: 768px) {
   .dashboard-summary {
     grid-template-columns: 1fr;

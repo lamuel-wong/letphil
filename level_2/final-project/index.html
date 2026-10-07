@@ -109,6 +109,43 @@
             <!-- Goal Tracker -->
             <section id="goals" class="goals-tracker">
               <h2>Goals Tracker</h2>
+              
+              <form id="goal-form" class="goal-form">
+                <div class="form-group">
+                  <label for="goal-title">Goal Title</label>
+                  <input id="goal-title" type="text" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="goal-target">Target</label>
+                  <input id="goal-target" type="number" min="1" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="goal-unit">Tracking Unit</label>
+                  <select id="goal-unit" required>
+                    <option value="sessions">Sessions</option>
+                    <option value="hours">Hours</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="goal-linked-type">Linked Activity</label>
+                  <select id="goal-linked-type" required>
+                    <option value="gym">Gym</option>
+                    <option value="study">Study</option>
+                    <option value="work">Work</option>
+                    <option value="commitment">Commitment</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <button id="goal-submit-btn" type="submit">Add Goal</button>
+
+                <button id="cancel-goal-edit-btn" type="button" hidden>
+                  Cancel
+                </button>
+              </form>
 
               <div id="goal-list"></div>
             </section>

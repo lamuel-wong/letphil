@@ -29,7 +29,7 @@ const defaultScheduleBlocks = [
   },
 ];
 
-const goals = [
+const defaultGoals = [
   {
     id: 1,
     title: "Gym",
@@ -65,12 +65,15 @@ const contactMessages = [];
 const currentWeekStart = "2026-10-05"; // hardcoded start week for testing
 
 const weeklyPlanner = document.getElementById("weekly-planner");
-const scheduleForm = document.getElementById("schedule-form");
 const weekRange = document.getElementById("week-range");
-
+const scheduleForm = document.getElementById("schedule-form");
 const scheduleSubmitBtn = document.getElementById("schedule-submit-btn");
+const cancelScheduleEditBtn = document.getElementById("cancel-edit-btn");
 
-const cancelEditBtn = document.getElementById("cancel-edit-btn");
+const goalForm = document.getElementById("goal-form");
+const goalSubmitBtn = document.getElementById("goal-submit-btn");
+const cancelGoalEditBtn = document.getElementById("cancel-goal-edit-btn");
+const goalList = document.getElementById("goal-list");
 
 let scheduleBlocks =
   JSON.parse(localStorage.getItem("scheduleBlocks")) || defaultScheduleBlocks;
@@ -78,8 +81,13 @@ let scheduleBlocks =
 // state variable for handleScheduleSubmit function
 let editingScheduleId = null;
 
+let goals = JSON.parse(localStorage.getItem("goals")) || defaultGoals;
+
+let editingGoalId = null;
+
 // Date functions
 
+// for splitting date string into year, month, and date
 function createDateFromString(dateString) {
   const parts = dateString.split("-");
 
@@ -105,6 +113,16 @@ function formatDisplayDate(date) {
     month: "short",
     day: "numeric",
   });
+}
+
+function getWeekStart(dateString) {
+  const date = createDateFromString(dateString);
+  const dayOfWeek = date.getDay();
+  const daysSinceMonday = (dayOfWeek + 6) % 7;
+
+  date.setDate(date.getDate() - daysSinceMonday);
+
+  return formatDateForData(date);
 }
 
 // Weekly Planner
@@ -171,6 +189,20 @@ function createScheduleCard(block) {
   time.classList.add("schedule-time");
   time.textContent = `${block.startTime} - ${block.endTime}`;
 
+  const completionLabel = document.createElement("label");
+  completionLabel.classList.add("schedule-completion");
+
+  const completionCheckbox = document.createElement("input");
+  completionCheckbox.type = "checkbox";
+  completionCheckbox.checked = block.completed;
+
+  completionCheckbox.addEventListener("change", () => {
+    toggleScheduleCompletion(block.id);
+  });
+
+  completionLabel.appendChild(completionCheckbox);
+  completionLabel.append(" Completed");
+
   const editButton = document.createElement("button");
 
   // Edit/Update
@@ -195,6 +227,7 @@ function createScheduleCard(block) {
   card.appendChild(title);
   card.appendChild(type);
   card.appendChild(time);
+  card.appendChild(completionLabel);
   card.appendChild(editButton);
   card.appendChild(deleteButton);
 
@@ -203,6 +236,7 @@ function createScheduleCard(block) {
 
 // Schedule blocks
 
+// find original schedule block and fill with existing values for editing
 function editScheduleBlock(id) {
   const block = scheduleBlocks.find((block) => block.id === id);
 
@@ -219,7 +253,7 @@ function editScheduleBlock(id) {
   editingScheduleId = id;
 
   scheduleSubmitBtn.textContent = "Update Schedule";
-  cancelEditBtn.hidden = false;
+  cancelScheduleEditBtn.hidden = false;
 }
 
 // helper to reset form back to add mode
@@ -229,7 +263,7 @@ function resetScheduleForm() {
   editingScheduleId = null;
 
   scheduleSubmitBtn.textContent = "Add Schedule";
-  cancelEditBtn.hidden = true;
+  cancelScheduleEditBtn.hidden = true;
 }
 
 function renderScheduleBlocks() {
@@ -248,6 +282,10 @@ function renderScheduleBlocks() {
 
 function saveScheduleBlocks() {
   localStorage.setItem("scheduleBlocks", JSON.stringify(scheduleBlocks));
+}
+
+function saveGoals() {
+  localStorage.setItem("goals", JSON.stringify(goals));
 }
 
 function handleScheduleSubmit(event) {
@@ -288,6 +326,7 @@ function handleScheduleSubmit(event) {
 
   saveScheduleBlocks();
   renderWeeklyPlanner();
+  renderGoals();
   resetScheduleForm();
 }
 
@@ -305,13 +344,223 @@ function deleteScheduleBlock(id) {
 
     saveScheduleBlocks();
     renderWeeklyPlanner();
+    renderGoals();
   }
+}
+
+function toggleScheduleCompletion(id) {
+  const block = scheduleBlocks.find((block) => block.id === id);
+
+  if (!block) {
+    return;
+  }
+
+  block.completed = !block.completed;
+
+  saveScheduleBlocks();
+
+  renderGoals();
+}
+
+// Goal Tracker
+
+function createGoalCard(goal) {
+  const card = document.createElement("article");
+  card.classList.add("goal-card");
+
+  const title = document.createElement("h3");
+  title.classList.add("goal-title");
+  title.textContent = goal.title;
+
+  const progress = calculateGoalProgress(goal);
+
+  const progressText = document.createElement("p");
+  progressText.classList.add("goal-progress");
+  progressText.textContent = `${progress} / ${goal.target} ${goal.unit}`;
+
+  const progressBar = document.createElement("progress");
+  progressBar.classList.add("goal-progress-bar");
+
+  progressBar.max = goal.target;
+  progressBar.value = Math.min(progress, goal.target);
+
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.classList.add("edit-goal-btn");
+  editButton.textContent = "Edit";
+
+  editButton.addEventListener("click", () => editGoal(goal.id));
+
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.classList.add("delete-goal-btn");
+  deleteButton.textContent = "Delete";
+
+  deleteButton.addEventListener("click", () => deleteGoal(goal.id));
+
+  card.appendChild(title);
+  card.appendChild(progressText);
+  card.appendChild(progressBar);
+  card.appendChild(editButton);
+  card.appendChild(deleteButton);
+
+  return card;
+}
+
+function renderGoals() {
+  goalList.innerHTML = "";
+
+  goals.forEach((goal) => {
+    if (goal.weekStartDate === currentWeekStart) {
+      const goalCard = createGoalCard(goal);
+
+      goalList.appendChild(goalCard);
+    }
+  });
+}
+
+// find original goal and fill with existing values for editing
+function editGoal(id) {
+  const goal = goals.find((goal) => goal.id === id);
+
+  if (!goal) {
+    return;
+  }
+
+  document.getElementById("goal-title").value = goal.title;
+  document.getElementById("goal-target").value = goal.target;
+  document.getElementById("goal-unit").value = goal.unit;
+
+  document.getElementById("goal-linked-type").value =
+    goal.linkedType;
+
+  editingGoalId = id;
+
+  goalSubmitBtn.textContent = "Update Goal";
+  cancelGoalEditBtn.hidden = false;
+}
+
+function resetGoalForm() {
+  goalForm.reset();
+
+  editingGoalId = null;
+
+  goalSubmitBtn.textContent = "Add Goal";
+  cancelGoalEditBtn.hidden = true;
+}
+
+function calculateGoalProgress(goal) {
+  const matchingBlocks = scheduleBlocks.filter((block) => {
+    return (
+      block.type === goal.linkedType &&
+      block.completed === true &&
+      getWeekStart(block.date) === goal.weekStartDate
+    );
+  });
+
+  if (goal.unit === "sessions") {
+    return matchingBlocks.length;
+  }
+
+  if (goal.unit === "hours") {
+    const totalMinutes = matchingBlocks.reduce((total, block) => {
+      const startParts = block.startTime.split(":");
+      const endParts = block.endTime.split(":");
+
+      const startMinutes = Number(startParts[0]) * 60 + Number(startParts[1]);
+
+      const endMinutes = Number(endParts[0]) * 60 + Number(endParts[1]);
+
+      // const duration = endMinutes - startMinutes;
+      let duration = endMinutes - startMinutes;
+
+      // for if the end time is after midnight
+      if (duration < 0) {
+        duration += 24 * 60;
+      }
+
+      return total + duration;
+    }, 0);
+
+    return Math.round((totalMinutes / 60) * 100) / 100;
+  }
+
+  return 0;
+}
+
+function handleGoalSubmit(event) {
+  event.preventDefault();
+
+  const title = document.getElementById("goal-title").value.trim();
+
+  const target = Number(document.getElementById("goal-target").value);
+
+  const unit = document.getElementById("goal-unit").value;
+
+  const linkedType = document.getElementById("goal-linked-type").value;
+
+  if (!title || !Number.isFinite(target) || target <= 0) {
+    alert("Please enter a valid goal title and target.");
+    return;
+  }
+
+  if (editingGoalId === null) {
+    const newGoal = {
+      id: Date.now(),
+      title: title,
+      target: target,
+      unit: unit,
+      weekStartDate: currentWeekStart,
+      linkedType: linkedType,
+    };
+
+    goals.push(newGoal);
+  } else {
+    const goal = goals.find(
+      (goal) => goal.id === editingGoalId
+    );
+
+    if (!goal) {
+      resetGoalForm();
+      return;
+    }
+
+    goal.title = title;
+    goal.target = target;
+    goal.unit = unit;
+    goal.linkedType = linkedType;
+  }
+
+  saveGoals();
+  renderGoals();
+  resetGoalForm();
+}
+
+function deleteGoal(id) {
+  const index = goals.findIndex((goal) => goal.id === id);
+
+  if (index === -1) {
+    return;
+  }
+
+  goals.splice(index, 1);
+
+  if (editingGoalId === id) {
+    resetGoalForm();
+  }
+
+  saveGoals();
+  renderGoals();
 }
 
 // Event listeners
 
 scheduleForm.addEventListener("submit", handleScheduleSubmit);
-cancelEditBtn.addEventListener("click", resetScheduleForm);
+cancelScheduleEditBtn.addEventListener("click", resetScheduleForm);
+
+goalForm.addEventListener("submit", handleGoalSubmit);
+cancelGoalEditBtn.addEventListener("click", resetGoalForm);
 
 // Main
 renderWeeklyPlanner();
+renderGoals();
