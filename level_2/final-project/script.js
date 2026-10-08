@@ -22,7 +22,34 @@ const defaultScheduleBlocks = [
     id: 3,
     title: "Upper Body",
     type: "gym",
-    date: "2026-10-06",
+    date: "2026-09-28",
+    startTime: "22:00",
+    endTime: "23:15",
+    completed: false,
+  },
+  {
+    id: 4,
+    title: "Work",
+    type: "work",
+    date: "2026-09-29",
+    startTime: "09:15",
+    endTime: "20:30",
+    completed: false,
+  },
+  {
+    id: 5,
+    title: "Mentorship Class",
+    type: "study",
+    date: "2026-09-30",
+    startTime: "22:30",
+    endTime: "23:30",
+    completed: false,
+  },
+  {
+    id: 6,
+    title: "Upper Body",
+    type: "gym",
+    date: "2026-09-28",
     startTime: "22:00",
     endTime: "23:15",
     completed: false,
@@ -35,7 +62,7 @@ const defaultGoals = [
     title: "Gym",
     target: 4,
     unit: "sessions",
-    weekStartDate: "2026-10-05",
+    weekStartDate: "2026-10-04",
     linkedType: "gym",
   },
   {
@@ -43,49 +70,87 @@ const defaultGoals = [
     title: "Study",
     target: 10,
     unit: "hours",
-    weekStartDate: "2026-10-05",
+    weekStartDate: "2026-10-04",
+    linkedType: "study",
+  },
+  {
+    id: 3,
+    title: "Gym",
+    target: 4,
+    unit: "sessions",
+    weekStartDate: "2026-09-27",
+    linkedType: "gym",
+  },
+  {
+    id: 4,
+    title: "Study",
+    target: 10,
+    unit: "hours",
+    weekStartDate: "2026-09-27",
     linkedType: "study",
   },
 ];
 
-// Global variables
+//
+// GLOBAL VARIABLES
+//
 
 const days = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
-  "Sunday",
 ];
 
 const contactMessages = [];
 
-const currentWeekStart = "2026-10-05"; // hardcoded start week for testing
+// grab current week
+const todayWeekStart = getWeekStart(formatDateForData(new Date()));
 
+let currentWeekStart = todayWeekStart;
+
+// dashboard variables
+const goalsCompletedValue = document.getElementById("goals-completed-value");
+const studyHoursValue = document.getElementById("study-hours-value");
+const nextShiftValue = document.getElementById("next-shift-value");
+
+// weekly planner variables
 const weeklyPlanner = document.getElementById("weekly-planner");
 const weekRange = document.getElementById("week-range");
+
+const previousWeekBtn = document.getElementById("previous-week-btn");
+const nextWeekBtn = document.getElementById("next-week-btn");
+const currentWeekBtn = document.getElementById("current-week-btn");
+const previousWeeksList = document.getElementById("previous-weeks-list");
+
 const scheduleForm = document.getElementById("schedule-form");
 const scheduleSubmitBtn = document.getElementById("schedule-submit-btn");
 const cancelScheduleEditBtn = document.getElementById("cancel-edit-btn");
 
+// goal tracker variables
 const goalForm = document.getElementById("goal-form");
 const goalSubmitBtn = document.getElementById("goal-submit-btn");
 const cancelGoalEditBtn = document.getElementById("cancel-goal-edit-btn");
 const goalList = document.getElementById("goal-list");
 
+// grab saved or default scheduleBlock objects
 let scheduleBlocks =
   JSON.parse(localStorage.getItem("scheduleBlocks")) || defaultScheduleBlocks;
 
 // state variable for handleScheduleSubmit function
 let editingScheduleId = null;
 
+// grab saved or default goals objects
 let goals = JSON.parse(localStorage.getItem("goals")) || defaultGoals;
 
 let editingGoalId = null;
 
-// Date functions
+//
+// DATE FUNCTIONS
+//
 
 // for splitting date string into year, month, and date
 function createDateFromString(dateString) {
@@ -115,17 +180,140 @@ function formatDisplayDate(date) {
   });
 }
 
+function createDateTime(dateString, timeString) {
+  const date = createDateFromString(dateString);
+
+  const timeParts = timeString.split(":");
+
+  const hours = Number(timeParts[0]);
+  const minutes = Number(timeParts[1]);
+
+  date.setHours(hours, minutes, 0, 0);
+
+  return date;
+}
+
 function getWeekStart(dateString) {
   const date = createDateFromString(dateString);
   const dayOfWeek = date.getDay();
-  const daysSinceMonday = (dayOfWeek + 6) % 7;
-
-  date.setDate(date.getDate() - daysSinceMonday);
+  date.setDate(date.getDate() - dayOfWeek);
 
   return formatDateForData(date);
 }
 
-// Weekly Planner
+// helper for switching weeks
+function changeWeek(numberOfWeeks) {
+  const weekStart = createDateFromString(currentWeekStart);
+  weekStart.setDate(weekStart.getDate() + numberOfWeeks * 7);
+  currentWeekStart = formatDateForData(weekStart);
+
+  renderSelectedWeek();
+}
+
+function goToCurrentWeek() {
+  currentWeekStart = todayWeekStart;
+  renderSelectedWeek();
+}
+
+function renderSelectedWeek() {
+  renderApp();
+  resetScheduleForm();
+  resetGoalForm();
+}
+
+//
+// DASHBOARD
+//
+
+function calculateGoalsCompleted(weekStartDate = currentWeekStart) {
+  const currentWeekGoals = goals.filter(
+    (goal) => goal.weekStartDate === weekStartDate,
+  );
+  const completedGoals = currentWeekGoals.filter(
+    (goal) => calculateGoalProgress(goal) >= goal.target,
+  );
+
+  return {
+    completed: completedGoals.length,
+    total: currentWeekGoals.length,
+  };
+}
+
+function renderGoalsCompleted() {
+  const result = calculateGoalsCompleted();
+
+  goalsCompletedValue.textContent = `${result.completed} / ${result.total}`;
+}
+
+function calculateStudyHours(weekStartDate = currentWeekStart) {
+  const studyBlocks = scheduleBlocks.filter((block) => {
+    return (
+      block.type === "study" &&
+      block.completed === true &&
+      getWeekStart(block.date) === weekStartDate
+    );
+  });
+
+  const totalMinutes = studyBlocks.reduce((total, block) => {
+    return total + calculateBlockDuration(block);
+  }, 0);
+
+  return Math.round((totalMinutes / 60) * 100) / 100;
+}
+
+function renderStudyHours() {
+  const hours = calculateStudyHours();
+
+  studyHoursValue.textContent = hours + " h";
+}
+
+function findUpcomingShift() {
+  const now = new Date();
+
+  const upcomingShifts = scheduleBlocks
+    .filter((block) => {
+      if (block.type !== "work") {
+        return false;
+      }
+
+      if (block.completed === true) {
+        return false;
+      }
+
+      const shiftDateTime = createDateTime(block.date, block.startTime);
+
+      return shiftDateTime >= now;
+    })
+    .sort((a, b) => {
+      const dateA = createDateTime(a.date, a.startTime);
+      const dateB = createDateTime(b.date, b.startTime);
+
+      return dateA - dateB;
+    });
+
+  return upcomingShifts[0] || null;
+}
+
+function renderUpcomingShift() {
+  const shift = findUpcomingShift();
+
+  if (!shift) {
+    nextShiftValue.textContent = "None";
+    return;
+  }
+
+  const shiftDate = createDateFromString(shift.date);
+
+  nextShiftValue.textContent = `${formatDisplayDate(shiftDate)} at ${shift.startTime}`;
+}
+
+function renderDashboard() {
+  renderGoalsCompleted();
+  renderStudyHours();
+  renderUpcomingShift();
+}
+
+// WEEKLY PLANNER
 
 function renderWeeklyPlanner() {
   weeklyPlanner.innerHTML = "";
@@ -171,7 +359,7 @@ function renderWeekRange() {
   weekRange.textContent = `${formatDisplayDate(startDate)} - ${formatDisplayDate(endDate)}`;
 }
 
-// Schedule cards
+// SCHEDULE CARDS
 
 function createScheduleCard(block) {
   const card = document.createElement("article");
@@ -234,7 +422,9 @@ function createScheduleCard(block) {
   return card;
 }
 
-// Schedule blocks
+//
+// SCHEDULE BLOCKS
+//
 
 // find original schedule block and fill with existing values for editing
 function editScheduleBlock(id) {
@@ -325,8 +515,7 @@ function handleScheduleSubmit(event) {
   }
 
   saveScheduleBlocks();
-  renderWeeklyPlanner();
-  renderGoals();
+  renderApp();
   resetScheduleForm();
 }
 
@@ -343,8 +532,7 @@ function deleteScheduleBlock(id) {
     }
 
     saveScheduleBlocks();
-    renderWeeklyPlanner();
-    renderGoals();
+    renderApp();
   }
 }
 
@@ -359,10 +547,12 @@ function toggleScheduleCompletion(id) {
 
   saveScheduleBlocks();
 
-  renderGoals();
+  renderApp();
 }
 
-// Goal Tracker
+//
+// GOAL TRACKER
+//
 
 function createGoalCard(goal) {
   const card = document.createElement("article");
@@ -431,8 +621,7 @@ function editGoal(id) {
   document.getElementById("goal-target").value = goal.target;
   document.getElementById("goal-unit").value = goal.unit;
 
-  document.getElementById("goal-linked-type").value =
-    goal.linkedType;
+  document.getElementById("goal-linked-type").value = goal.linkedType;
 
   editingGoalId = id;
 
@@ -464,22 +653,7 @@ function calculateGoalProgress(goal) {
 
   if (goal.unit === "hours") {
     const totalMinutes = matchingBlocks.reduce((total, block) => {
-      const startParts = block.startTime.split(":");
-      const endParts = block.endTime.split(":");
-
-      const startMinutes = Number(startParts[0]) * 60 + Number(startParts[1]);
-
-      const endMinutes = Number(endParts[0]) * 60 + Number(endParts[1]);
-
-      // const duration = endMinutes - startMinutes;
-      let duration = endMinutes - startMinutes;
-
-      // for if the end time is after midnight
-      if (duration < 0) {
-        duration += 24 * 60;
-      }
-
-      return total + duration;
+      return total + calculateBlockDuration(block);
     }, 0);
 
     return Math.round((totalMinutes / 60) * 100) / 100;
@@ -488,15 +662,29 @@ function calculateGoalProgress(goal) {
   return 0;
 }
 
+// helper to calculate duration
+function calculateBlockDuration(block) {
+  const startParts = block.startTime.split(":");
+  const endParts = block.endTime.split(":");
+
+  const startMinutes = Number(startParts[0]) * 60 + Number(startParts[1]);
+  const endMinutes = Number(endParts[0]) * 60 + Number(endParts[1]);
+
+  let duration = endMinutes - startMinutes;
+
+  if (duration < 0) {
+    duration += 24 * 60;
+  }
+
+  return duration;
+}
+
 function handleGoalSubmit(event) {
   event.preventDefault();
 
   const title = document.getElementById("goal-title").value.trim();
-
   const target = Number(document.getElementById("goal-target").value);
-
   const unit = document.getElementById("goal-unit").value;
-
   const linkedType = document.getElementById("goal-linked-type").value;
 
   if (!title || !Number.isFinite(target) || target <= 0) {
@@ -516,9 +704,7 @@ function handleGoalSubmit(event) {
 
     goals.push(newGoal);
   } else {
-    const goal = goals.find(
-      (goal) => goal.id === editingGoalId
-    );
+    const goal = goals.find((goal) => goal.id === editingGoalId);
 
     if (!goal) {
       resetGoalForm();
@@ -532,7 +718,7 @@ function handleGoalSubmit(event) {
   }
 
   saveGoals();
-  renderGoals();
+  renderApp();
   resetGoalForm();
 }
 
@@ -550,10 +736,102 @@ function deleteGoal(id) {
   }
 
   saveGoals();
-  renderGoals();
+  renderApp();
 }
 
-// Event listeners
+//
+// PREVIOUS WEEK FUNCTIONS
+//
+
+function getPreviousWeekStarts() {
+  const scheduleWeeks = scheduleBlocks.map((block) => getWeekStart(block.date));
+  const goalWeeks = goals.map((goal) => goal.weekStartDate);
+
+  const allWeeks = [...scheduleWeeks, ...goalWeeks];
+
+  // console.log("allweeks: " + allWeeks);
+  // console.log("scheduleWeeks: " + scheduleWeeks);
+  // console.log("goalWeeks: " + goalWeeks);
+
+  const uniqueWeeks = [...new Set(allWeeks)];
+
+  // console.log("uniqueWeeks: " + uniqueWeeks);
+
+  return uniqueWeeks
+    .filter(
+      (weekStart) =>
+        createDateFromString(weekStart) < createDateFromString(todayWeekStart),
+    )
+    .sort((a, b) => createDateFromString(b) - createDateFromString(a));
+
+  // console.log("fixed uniqueWeeks: " + uniqueWeeks);
+}
+
+function createPreviousWeekCard(weekStartDate) {
+  const card = document.createElement("article");
+  card.classList.add("previous-week-card");
+
+  const startDate = createDateFromString(weekStartDate);
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 6);
+
+  const title = document.createElement("h3");
+  title.textContent = `${formatDisplayDate(startDate)} - ${formatDisplayDate(endDate)}`;
+
+  const goalResult = calculateGoalsCompleted(weekStartDate);
+  const goalsSummary = document.createElement("p");
+  goalsSummary.textContent = `Goals completed: ${goalResult.completed} / ${goalResult.total}`;
+
+  const studyHours = calculateStudyHours(weekStartDate);
+
+  const viewButton = document.createElement("button");
+  viewButton.type = "button";
+  viewButton.textContent = "View Week";
+
+  viewButton.addEventListener("click", () => {
+    currentWeekStart = weekStartDate;
+    renderSelectedWeek();
+
+    document.getElementById("planner").scrollIntoView({
+      behavior: "smooth",
+    });
+  });
+
+  card.appendChild(title);
+  card.appendChild(goalsSummary);
+
+  if (studyHours > 0) {
+    const studySummary = document.createElement("p");
+    studySummary.textContent = `Study hours: ${studyHours} h`;
+
+    card.appendChild(studySummary);
+  }
+
+  card.appendChild(viewButton);
+
+  return card;
+}
+
+function renderPreviousWeeks() {
+  previousWeeksList.innerHTML = "";
+  const previousWeeks = getPreviousWeekStarts();
+
+  if (previousWeeks.length === 0) {
+    const message = document.createElement("p");
+    message.textContent = "No previous weeks saved yet.";
+
+    previousWeeksList.appendChild(message);
+
+    return;
+  }
+
+  previousWeeks.forEach((weekStartDate) => {
+    const card = createPreviousWeekCard(weekStartDate);
+    previousWeeksList.appendChild(card);
+  });
+}
+
+// EVENT LISTENERS
 
 scheduleForm.addEventListener("submit", handleScheduleSubmit);
 cancelScheduleEditBtn.addEventListener("click", resetScheduleForm);
@@ -561,6 +839,21 @@ cancelScheduleEditBtn.addEventListener("click", resetScheduleForm);
 goalForm.addEventListener("submit", handleGoalSubmit);
 cancelGoalEditBtn.addEventListener("click", resetGoalForm);
 
-// Main
-renderWeeklyPlanner();
-renderGoals();
+previousWeekBtn.addEventListener("click", () => {
+  changeWeek(-1);
+});
+nextWeekBtn.addEventListener("click", () => {
+  changeWeek(1);
+});
+currentWeekBtn.addEventListener("click", goToCurrentWeek);
+
+// MAIN
+
+function renderApp() {
+  renderWeeklyPlanner();
+  renderGoals();
+  renderDashboard();
+  renderPreviousWeeks();
+}
+
+renderApp();

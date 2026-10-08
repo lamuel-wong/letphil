@@ -58,8 +58,22 @@
             <section id="planner" class="planner">
               <div class="section-header">
                 <h2>Weekly Planner</h2>
-                <p id="week-range">Month Day - Month Day</p>
+
+                <div class="week-navigation">
+                  <button id="previous-week-btn" type="button">
+                    ← Previous
+                  </button>
+
+                  <p id="week-range">Month Day - Month Day</p>
+
+                  <button id="next-week-btn" type="button">Next →</button>
+
+                  <button id="current-week-btn" type="button">
+                    Current Week
+                  </button>
+                </div>
               </div>
+
               <form id="schedule-form" class="schedule-form">
                 <div class="form-group">
                   <label for="schedule-title">Title</label>
@@ -109,7 +123,7 @@
             <!-- Goal Tracker -->
             <section id="goals" class="goals-tracker">
               <h2>Goals Tracker</h2>
-              
+
               <form id="goal-form" class="goal-form">
                 <div class="form-group">
                   <label for="goal-title">Goal Title</label>
