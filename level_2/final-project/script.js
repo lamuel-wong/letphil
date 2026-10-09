@@ -105,7 +105,7 @@ const days = [
   "Saturday",
 ];
 
-const contactMessages = [];
+let contactMessages = JSON.parse(localStorage.getItem("contactMessages")) || [];
 
 // grab current week
 const todayWeekStart = getWeekStart(formatDateForData(new Date()));
@@ -135,6 +135,11 @@ const goalForm = document.getElementById("goal-form");
 const goalSubmitBtn = document.getElementById("goal-submit-btn");
 const cancelGoalEditBtn = document.getElementById("cancel-goal-edit-btn");
 const goalList = document.getElementById("goal-list");
+
+// contact form variables
+const contactForm = document.getElementById("contact-form");
+
+const contactStatus = document.getElementById("contact-status");
 
 // grab saved or default scheduleBlock objects
 let scheduleBlocks =
@@ -217,6 +222,7 @@ function goToCurrentWeek() {
 
 function renderSelectedWeek() {
   renderApp();
+  loadWeather();
   resetScheduleForm();
   resetGoalForm();
 }
@@ -338,8 +344,13 @@ function renderWeeklyPlanner() {
     dayDate.classList.add("day-date");
     dayDate.textContent = formatDisplayDate(currentDate);
 
+    const weatherContainer = document.createElement("div");
+    weatherContainer.classList.add("day-weather");
+    weatherContainer.dataset.date = dateString;
+
     dayColumn.appendChild(dayTitle);
     dayColumn.appendChild(dayDate);
+    dayColumn.appendChild(weatherContainer);
 
     weeklyPlanner.appendChild(dayColumn);
   });
@@ -357,6 +368,138 @@ function renderWeekRange() {
   endDate.setDate(startDate.getDate() + 6);
 
   weekRange.textContent = `${formatDisplayDate(startDate)} - ${formatDisplayDate(endDate)}`;
+}
+
+// weather helper
+function describeWeather(weatherCode) {
+  let weatherDesc;
+
+  if (weatherCode === 0) {
+    weatherDesc = "☀️ Clear sky";
+  } else if (weatherCode === 1 || weatherCode === 2 || weatherCode === 3) {
+    weatherDesc = "⛅ Partly cloudy";
+  } else if (weatherCode === 45 || weatherCode === 48) {
+    weatherDesc = "🌫️ Foggy";
+  } else if (weatherCode >= 51 && weatherCode <= 67) {
+    weatherDesc = "🌧️ Rain or drizzle";
+  } else if (weatherCode >= 71 && weatherCode <= 77) {
+    weatherDesc = "🌨️ Snow";
+  } else if (weatherCode >= 80 && weatherCode <= 82) {
+    weatherDesc = "🌦️ Rain showers";
+  } else if (weatherCode >= 85 && weatherCode <= 86) {
+    weatherDesc = "🌨️ Snow showers";
+  } else if (weatherCode >= 95) {
+    weatherDesc = "⛈️ Thunderstorm";
+  } else {
+    weatherDesc = "🌡️ Unknown weather";
+  }
+
+  return weatherDesc;
+}
+
+// WEATHER API
+
+async function fetchWeather() {
+  // Toronto coordinates
+  const latitude = 43.65;
+  const longitude = -79.38;
+
+  const url =
+    `https://api.open-meteo.com/v1/forecast` +
+    `?latitude=${latitude}` +
+    `&longitude=${longitude}` +
+    `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+    `&past_days=6` +
+    `&timezone=America%2FToronto`;
+
+  console.log(url);
+
+  try {
+    showWeatherLoading();
+    const response = await axios.get(url);
+
+    return response.data.daily;
+  } catch (error) {
+    console.error("Weather error:", error);
+
+    showWeatherError();
+
+    return null;
+  }
+}
+
+function showWeatherLoading() {
+  const weatherContainers = document.querySelectorAll(".day-weather");
+  weatherContainers.forEach(
+    (container) => (container.textContent = "Loading..."),
+  );
+}
+
+function showWeatherError() {
+  const weatherContainers = document.querySelectorAll(".day-weather");
+  weatherContainers.forEach(
+    (container) => (container.textContent = "Weather unavailable"),
+  );
+}
+
+function renderWeather(weatherData) {
+  const weatherContainers = document.querySelectorAll(".day-weather");
+  weatherContainers.forEach((container) => (container.textContent = ""));
+
+  if (!weatherData) {
+    return;
+  }
+
+  // match api forecast date to corresponding day in planner
+  // only render forecast for dates in current planner week
+  weatherData.time.forEach((date, index) => {
+    const weatherContainer = document.querySelector(
+      `.day-weather[data-date="${date}"]`,
+    );
+
+    if (!weatherContainer) {
+      return;
+    }
+
+    const weatherDesc = describeWeather(weatherData.weather_code[index]);
+    const maxTemp = Math.round(weatherData.temperature_2m_max[index]);
+    const minTemp = Math.round(weatherData.temperature_2m_min[index]);
+
+    weatherContainer.innerHTML = `
+      <span class="weather-desc">${weatherDesc}</span>
+      <span class="weather-temp">
+        ${maxTemp}° / ${minTemp}°
+      </span>
+    `;
+  });
+}
+
+// helper for loadWeather so i dont call the api for previous weeks
+function isPastWeek() {
+  const weekStart = createDateFromString(currentWeekStart);
+
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  console.log(today);
+  
+  return weekEnd < today;
+}
+
+async function loadWeather() {
+  if (isPastWeek()) {
+    return;
+  }
+
+  const weatherData = await fetchWeather();
+  if (!weatherData) {
+    return;
+  }
+
+  renderWeather(weatherData);
 }
 
 // SCHEDULE CARDS
@@ -831,6 +974,36 @@ function renderPreviousWeeks() {
   });
 }
 
+// CONTACT FORM
+
+function handleContactSubmit(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("contact-name").value.trim();
+  const email = document.getElementById("contact-email").value.trim();
+  const message = document.getElementById("contact-message").value.trim();
+
+  if (name.length < 2 || !email.includes("@") || message.length < 10) {
+    contactStatus.textContent = "Please enter valid contact information.";
+    return;
+  }
+
+  const newMessage = {
+    id: Date.now(),
+    name: name,
+    email: email,
+    message: message,
+    submittedAt: new Date().toISOString(),
+  };
+
+  contactMessages.push(newMessage);
+
+  localStorage.setItem("contactMessages", JSON.stringify(contactMessages));
+
+  contactStatus.textContent = "Feedback sent successfully.";
+  contactForm.reset();
+}
+
 // EVENT LISTENERS
 
 scheduleForm.addEventListener("submit", handleScheduleSubmit);
@@ -847,6 +1020,8 @@ nextWeekBtn.addEventListener("click", () => {
 });
 currentWeekBtn.addEventListener("click", goToCurrentWeek);
 
+contactForm.addEventListener("submit", handleContactSubmit);
+
 // MAIN
 
 function renderApp() {
@@ -857,3 +1032,4 @@ function renderApp() {
 }
 
 renderApp();
+loadWeather();

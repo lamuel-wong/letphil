@@ -173,11 +173,33 @@
 
           <section id="contact" class="contact">
             <h2>Feedback / Contact</h2>
+
+            <form id="contact-form" class="contact-form">
+              <div class="form-group">
+                <label for="contact-name">Name</label>
+                <input id="contact-name" type="text" required />
+              </div>
+
+              <div class="form-group">
+                <label for="contact-email">Email</label>
+                <input id="contact-email" type="email" required />
+              </div>
+
+              <div class="form-group">
+                <label for="contact-message">Message</label>
+                <textarea id="contact-message" rows="5" required></textarea>
+              </div>
+
+              <button type="submit">Send Feedback</button>
+
+              <p id="contact-status"></p>
+            </form>
           </section>
         </main>
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
